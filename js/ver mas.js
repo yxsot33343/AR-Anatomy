@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
           name: 'Sistema muscular',
           description: 'Sistema muscular humano',
-          modelUrl: 'Sistema muscular/Sistema muscular.glb',
+          modelUrl: 'Sistema_muscular/Sistema muscular.glb',
           exploreUrl: 'detalle/sistema_muscular.html' 
         
         
@@ -38,8 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
     {
         name: 'Musculos lisos',
         description: 'Tejido muscular involuntario de órganos internos.',
-        modelUrl: 'Sistema muscular/Musculos lisos.glb',
-        exploreUrl: 'detalle/smooth_muscle_cell.html'
+        modelUrl: 'Sistema_muscular/Musculos lisos.glb',
+        exploreUrl: 'detalle/Musculos lisos.html'
       },
      {
         name: 'Musculo cardíaco',
