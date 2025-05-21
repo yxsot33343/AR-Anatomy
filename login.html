@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login AR-Anatomy</title>
+  <style>
+    :root {
+      --dark-bg: #1a1a1a;
+      --card-bg: #242424;
+      --accent-red: #8c3030;
+      --deep-red: #6e2626;
+      --teal-accent: #34a3a3;
+      --text-light: #e0e0e0;
+    }
+
+    /* ——— Reset general ——— */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* ——— Body centralizado + gradiente de fondo ——— */
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      /* Gradiente más suave y centrado */
+      background-color: var(--dark-bg);
+      background-image: 
+        radial-gradient(circle at 80% 20%, rgba(52,34,51,0.2), transparent 70%),
+        radial-gradient(circle at 20% 80%, rgba(30,51,51,0.2), transparent 70%);
+      overflow: hidden; /* ocultamos scroll, las partes no deben salirse */
+      position: relative;
+    }
+
+    /* ——— Contenedor de partículas (cubre todo el viewport) ——— */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none; /* evita interferir con clicks en el formulario */
+      overflow: hidden;
+    }
+
+    /* ——— Cada partícula ——— */
+    .particle {
+      position: absolute;
+      bottom: -20px;               /* nacen justo por debajo del viewport */
+      background-color: var(--accent-red);
+      border-radius: 50%;
+      opacity: 0;                  /* arranca transparente */
+      animation: float 12s infinite linear;
+    }
+
+    /* ——— Keyframes para que floten hacia arriba, crezcan y se desvanezcan ——— */
+    @keyframes float {
+      0% {
+        transform: translateY(0) scale(0.3);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.2;
+      }
+      50% {
+        transform: translateY(-50vh) scale(1);
+        opacity: 0.5;
+      }
+      80% {
+        opacity: 0.2;
+      }
+      100% {
+        transform: translateY(-110vh) scale(0.3);
+        opacity: 0;
+      }
+    }
+
+    /* ——— Tarjeta (flip 3D) ——— */
+    .container {
+      position: relative;
+      width: 400px;
+      height: 580px;
+      perspective: 1000px;
+    }
+
+    .card {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .container.flip .card {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      border-radius: 20px;
+      background-color: var(--card-bg);
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+    }
+
+    .form-header {
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .logo {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 15px;
+      transform: scale(1);
+      animation: pulse 3s infinite alternate;
+    }
+
+    @keyframes pulse {
+      0%   { transform: scale(1); }
+      100% { transform: scale(1.05); }
+    }
+
+    h2 {
+      color: var(--text-light);
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #999;
+      font-size: 16px;
+    }
+
+    .form-group {
+      width: 100%;
+      margin-bottom: 25px;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px 20px;
+      background-color: rgba(255, 255, 255, 0.07);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: var(--text-light);
+      font-size: 16px;
+      transition: all 0.3s;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--teal-accent);
+      box-shadow: 0 0 15px rgba(52, 163, 163, 0.3);
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background-color: var(--teal-accent);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #2c8a8a;
+      transform: translateY(-3px);
+      box-shadow: 0 7px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .toggle-form {
+      margin-top: 30px;
+      color: #999;
+      font-size: 14px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .toggle-form span {
+      color: var(--teal-accent);
+      font-weight: 600;
+    }
+
+    .toggle-form span:hover {
+      text-decoration: underline;
+    }
+
+    .heart-icon path {
+      fill: var(--accent-red);
+    }
+
+    /* ——— Media Queries ——— */
+    @media (max-width: 768px) {
+      .container {
+        width: 90%;
+        height: auto;
+        max-height: 90vh;
+        margin: 20px auto;
+      }
+      .card-face {
+        padding: 30px 20px;
+      }
+      .form-header {
+        margin-bottom: 30px;
+      }
+      .logo {
+        width: 100px;
+        height: 100px;
+      }
+      h2 {
+        font-size: 24px;
+      }
+      .subtitle {
+        font-size: 14px;
+      }
+      input {
+        padding: 12px 15px;
+        font-size: 14px;
+      }
+      .btn {
+        padding: 12px;
+        font-size: 14px;
+      }
+      .toggle-form {
+        margin-top: 20px;
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        width: 95%;
+      }
+      .card-face {
+        padding: 25px 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ——— Contenedor de partículas en el fondo ——— -->
+  <div class="particles"></div>
+
+  <div class="container">
+    <div class="card">
+      <!-- ——— Login (frontal) ——— -->
+      <div class="card-face card-front">
+        <div class="form-header">
+          <svg class="logo heart-icon" viewBox="0 0 512 512">
+            <path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"/>
+          </svg>
+          <h2>Bienvenido</h2>
+          <p class="subtitle">Inicia sesión para continuar</p>
+        </div>
+        <div class="form-group">
+          <input type="email" id="login-email" placeholder="Correo electrónico" required>
+        </div>
+        <div class="form-group">
+          <input type="password" id="login-password" placeholder="Contraseña" required>
+        </div>
+        <a href="oficial.html"><button class="btn btn-primary" id="login-btn">Iniciar Sesión</button></a>
+        <p class="toggle-form">¿No tienes una cuenta? <span id="show-register">Regístrate</span></p>
+      </div>
+
+      <!-- ——— Registro (trasera) ——— -->
+      <div class="card-face card-back">
+        <div class="form-header">
+          <svg class="logo heart-icon" viewBox="0 0 512 512">
+            <path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"/>
+          </svg>
+          <h2>Crear Cuenta</h2>
+          <p class="subtitle">Únete a nosotros</p>
+        </div>
+        <div class="form-group">
+          <input type="text" id="register-name" placeholder="Nombre completo" required>
+        </div>
+        <div class="form-group">
+          <input type="email" id="register-email" placeholder="Correo electrónico" required>
+        </div>
+        <div class="form-group">
+          <input type="password" id="register-password" placeholder="Contraseña" required>
+        </div>
+        <button class="btn btn-primary" id="register-btn">Registrarse</button>
+        <p class="toggle-form">¿Ya tienes una cuenta? <span id="show-login">Inicia sesión</span></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 1) Crear partículas en el fondo
+      var particlesContainer = document.querySelector('.particles');
+      if (particlesContainer) {
+        for (var i = 0; i < 20; i++) {
+          var particle = document.createElement('div');
+          particle.className = 'particle';
+
+          // Tamaño aleatorio (5px a 25px)
+          var aleatorio = Math.random() * 20 + 5;
+          particle.style.width = aleatorio + 'px';
+          particle.style.height = aleatorio + 'px';
+
+          // Posición horizontal aleatoria (0% a 100%)
+          particle.style.left = (Math.random() * 100) + '%';
+
+          // Delay y duración de animación aleatorios
+          var delay = Math.random() * 5;          // arranca en distintos momentos
+          var dur   = Math.random() * 7 + 8;      // duración entre 8s y 15s
+          particle.style.animationDelay    = delay + 's';
+          particle.style.animationDuration = dur + 's';
+
+          particlesContainer.appendChild(particle);
+        }
+      }
+
+      // 2) Lógica de “flip” entre login y registro
+      var container = document.querySelector('.container');
+      var showRegister = document.getElementById('show-register');
+      var showLogin    = document.getElementById('show-login');
+
+      if (showRegister && container) {
+        showRegister.addEventListener('click', function(e) {
+          e.preventDefault();
+          container.classList.add('flip');
+        });
+      }
+      if (showLogin && container) {
+        showLogin.addEventListener('click', function(e) {
+          e.preventDefault();
+          container.classList.remove('flip');
+        });
+      }
+
+      // 3) Botones de ejemplo que muestran alertas
+      var loginBtn    = document.getElementById('login-btn');
+      var registerBtn = document.getElementById('register-btn');
+
+      if (loginBtn) {
+        loginBtn.addEventListener('click', function() {
+          var email    = document.getElementById('login-email').value.trim();
+          var password = document.getElementById('login-password').value.trim();
+          if (email && password) {
+            alert('¡Inicio de sesión exitoso!');
+          } else {
+            alert('Por favor completa todos los campos');
+          }
+        });
+      }
+
+      if (registerBtn) {
+        registerBtn.addEventListener('click', function() {
+          var name     = document.getElementById('register-name').value.trim();
+          var email    = document.getElementById('register-email').value.trim();
+          var password = document.getElementById('register-password').value.trim();
+          if (name && email && password) {
+            alert('¡Registro exitoso! Ahora puedes iniciar sesión');
+            container.classList.remove('flip');
+          } else {
+            alert('Por favor completa todos los campos');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
