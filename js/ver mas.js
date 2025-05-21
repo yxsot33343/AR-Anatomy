@@ -1,84 +1,84 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const grid = document.querySelector('.models-grid');
-
-  // Plantilla de cada tarjeta
-  const cardTpl = model => `
-    <div class="model-card">
-      <div class="model-preview">
-        <model-viewer
-          src="${model.modelUrl}"
-          alt="${model.name}"
-          camera-controls
-          auto-rotate
-          loading="lazy"
-          style="width:100%; height:100%; --poster-color:transparent">
-        </model-viewer>
+    const grid = document.querySelector('.models-grid');
+  
+    // Plantilla de cada tarjeta
+    const cardTpl = model => `
+      <div class="model-card">
+        <div class="model-preview">
+          <model-viewer
+            src="${model.modelUrl}"
+            alt="${model.name}"
+            camera-controls
+            auto-rotate
+            loading="lazy"
+            style="width:100%; height:100%; --poster-color:transparent">
+          </model-viewer>
+        </div>
+        <div class="model-info">
+          <h3>${model.name}</h3>
+          <p>${model.description}</p>
+        </div>
+        <div class="model-actions">
+          <a href="${model.exploreUrl}" target="_blank" class="explore-button">Ver más</a>
+        </div>
       </div>
-      <div class="model-info">
-        <h3>${model.name}</h3>
-        <p>${model.description}</p>
-      </div>
-      <div class="model-actions">
-        <a href="${model.exploreUrl}" target="_blank" class="explore-button">Ver más</a>
-      </div>
-    </div>
-  `;
-
-  // Modelos base (puedes repetir, aquí hay 6 ejemplos)
-  const baseModels = [
-    {
+    `;
+  
+    // Modelos base (puedes repetir, aquí hay 6 ejemplos)
+    const baseModels = [
+      {
         
           name: 'Sistema muscular',
           description: 'Sistema muscular humano',
           modelUrl: 'Sistema_muscular/Sistema muscular.glb',
-          exploreUrl: 'detalle/sistema_muscular.html' 
+          exploreUrl: 'detalle/sistema_muscular.html' // si aún no tienes este HTML, crea uno
         
         
       },
-    {
+      {
         name: 'Musculos lisos',
         description: 'Tejido muscular involuntario de órganos internos.',
-        modelUrl: 'Sistema_muscular/Musculos lisos.glb',
+        modelUrl: 'Sistema_muscular/smooth_muscle_cell.glb',
         exploreUrl: 'detalle/Musculos lisos.html'
       },
-     {
+      {
         name: 'Musculo cardíaco',
         description: 'Músculo del corazón, de acción involuntaria.',
-        modelUrl: 'Sistema muscular/Musculo cardíaco.glb',
+        modelUrl: 'Sistema_muscular/Musculo cardíaco.glb',
         exploreUrl: 'detalle/Musculo cardíaco.html'
       },
-    {
+      {
         name: 'Fascias',
         description: 'Tejido que envuelve músculos y órganos.',
-        modelUrl: 'Sistema muscular/Fascias.glb',
+        modelUrl: 'Sistema_muscular/Fascias.glb',
         exploreUrl: 'detalle/Fascias.html'
       },
-    {
-      name: 'skeleton',
-      description: 'Esqueleto humano',
-      modelUrl: 'modelos ar/skeleton.obj',
-      exploreUrl: 'detalle/skeleton.html'
-    },
-    {
-      name: 'stylizeddigestivesystem',
-      description: 'Sistema digestivo estilizado',
-      modelUrl: 'modelos ar/stylizeddigestivesystem.glb',
-      exploreUrl: 'detalle/digestive.html'
+      {
+        name: 'skeleton',
+        description: 'Esqueleto humano',
+        modelUrl: 'modelos ar/skeleton.obj',
+        exploreUrl: 'detalle/skeleton.html'
+      },
+      {
+        name: 'stylizeddigestivesystem',
+        description: 'Sistema digestivo estilizado',
+        modelUrl: 'modelos ar/stylizeddigestivesystem.glb',
+        exploreUrl: 'detalle/digestive.html'
+      }
+    ];
+  
+    // Generar 48 entradas reusando el array base
+    const modelsData = [];
+    for (let i = 0; i < 48; i++) {
+      const m = baseModels[i % baseModels.length];
+      // opcionalmente podrías clonar y añadir un sufijo al nombre: `${m.name}_${i+1}`
+      modelsData.push(m);
     }
-  ];
-
-  // Generar 48 entradas reusando el array base
-  const modelsData = [];
-  for (let i = 0; i < 48; i++) {
-    const m = baseModels[i % baseModels.length];
-    // opcionalmente podrías clonar y añadir un sufijo al nombre: `${m.name}_${i+1}`
-    modelsData.push(m);
-  }
-
-  // Insertar todas las cards en el DOM
-  modelsData.forEach(model => {
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = cardTpl(model).trim();
-    grid.appendChild(wrapper.firstElementChild);
+  
+    // Insertar todas las cards en el DOM
+    modelsData.forEach(model => {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = cardTpl(model).trim();
+      grid.appendChild(wrapper.firstElementChild);
+    });
   });
-});
