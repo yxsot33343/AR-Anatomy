@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AR Anatomía - Experiencia Interactiva</title>
+  <link rel="stylesheet" href="css/oficial.css">
+  <script src="js/oficial.js" defer></script>
+  
+  
+  <!-- Fuentes e Iconos -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+  <!-- Animaciones y librerías -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Model Viewer -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+  
+</head>
+<body>
+  <canvas id="background-canvas"></canvas>
+  <div class="loader" id="loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p>Cargando...</p>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <i class="fas fa-user-md"></i> AR Anatomía
+    </div>
+    <div class="menu-toggle" id="menu-toggle">
+      <i class="fas fa-bars"></i>
+    </div>
+    <nav class="nav" id="nav">
+      <a href="#" class="nav-link active">Inicio</a>
+      <a href="#features" class="nav-link">Características</a>
+      <a href="#models" class="nav-link">Modelos</a>
+      <a href="#testimonials" class="nav-link">Testimonios</a>
+      <a href="#newsletter" class="nav-link">Contacto</a>
+    </nav>
+    <div class="auth-buttons">
+      <button class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i></button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">Descubre la <span class="highlight">Anatomía Humana</span> en 3D</h1>
+      <p class="hero-subtitle">Explora nuestro innovador modelo 3D y sumérgete en una experiencia interactiva única.</p>
+      <button class="cta-button">Explorar Ahora</button>
+    </div>
+    <div class="model-viewer-container">
+      <model-viewer id="mainModel" src="modelos ar/ecorche_-_anatomy_study.glb" alt="Modelo 3D de Anatomía" camera-controls auto-rotate ar>
+        <div slot="ar-button" class="ar-overlay"><i class="fas fa-arrows-alt"></i> AR</div>
+      </model-viewer>
+      <div class="model-controls">
+        <div class="model-control-btn" id="resetBtn"><i class="fas fa-sync-alt"></i></div>
+        <div class="model-control-btn" id="fullscreenBtn"><i class="fas fa-expand"></i></div>
+      </div>
+      <div class="model-sections">
+        <div class="model-section active">General</div>
+        <div class="model-section">Órganos</div>
+        <div class="model-section">Sistemas</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section (Diseño con Cards) -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-title">
+        <h2>Características</h2>
+        <button class="cta-button btn-secondary">Ver Más</button>
+      </div>
+      <!-- Cambiado a .feature-card para un look tipo tarjeta -->
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-cogs"></i></div>
+          <h3 class="feature-title">Interactividad</h3>
+          <p class="feature-desc">Controla y explora cada detalle con controles intuitivos.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-vr-cardboard"></i></div>
+          <h3 class="feature-title">Realidad Aumentada</h3>
+          <p class="feature-desc">Experimenta el modelo en AR a través de tu dispositivo móvil.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-brain"></i></div>
+          <h3 class="feature-title">Educativo</h3>
+          <p class="feature-desc">Aprende sobre anatomía de manera interactiva y visual.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Models Gallery Section con Slider (Scrollbar oculto) -->
+  <section class="section" id="models">
+    <div class="container">
+      <div class="section-title">
+        <h2>Galería de Modelos</h2>
+      </div>
+      <div class="models-slider-container">
+        <button class="models-slider-btn left" id="sliderLeft"><i class="fas fa-chevron-left"></i></button>
+        <div class="models-gallery" id="modelsGallery">
+          <!-- Model Card 1 -->
+          <div class="model-card">
+            <div class="model-preview">
+              <model-viewer src="modelos ar/ecorche_-_anatomy_study.glb" alt="Modelo 1" camera-controls auto-rotate></model-viewer>
+            </div>
+            <div class="model-info">
+              <h3 class="model-name">Esqueleto</h3>
+              <p class="model-description">Explora la anatomía 3D en detalle.</p>
+              <div class="model-tags">
+                <div class="model-tag">3D</div>
+                <div class="model-tag">Anatomía</div>
+              </div>
+              <div class="model-actions">
+                <a href="Explorar.html" class="model-explore">Explorar</a>
+              </div>
+            </div>
+          </div>
+          <!-- Model Card 2 -->
+          <div class="model-card">
+            <div class="model-preview">
+              <model-viewer src="modelos ar/stylizeddigestivesystem.glb" alt="Modelo 2" camera-controls auto-rotate></model-viewer>
+            </div>
+            <div class="model-info">
+              <h3 class="model-name">Sistema Digestivo </h3>
+              <p class="model-description">Descubre funciones interactivas y detalles precisos.</p>
+              <div class="model-tags">
+                <div class="model-tag">Interactivo</div>
+                <div class="model-tag">Educativo</div>
+              </div>
+              <div class="model-actions">
+                <a href="Explorar2.html" class="model-explore">Explorar</a>
+              </div>
+            </div>
+          </div>
+          <!-- Model Card 3 -->
+          <div class="model-card">
+            <div class="model-preview">
+              <model-viewer src="modelos ar/16_week_fetal_heart.glb" alt="Modelo 3" camera-controls auto-rotate></model-viewer>
+            </div>
+            <div class="model-info">
+              <h3 class="model-name">Corazón</h3>
+              <p class="model-description">Adéntrate en la complejidad del sistema musculoesquelético.</p>
+              <div class="model-tags">
+                <div class="model-tag">Musculatura</div>
+                <div class="model-tag">Estructura</div>
+              </div>
+              <div class="model-actions">
+                <a href="Explorar3.html" class="model-explore">Explorar</a>
+              </div>
+            </div>
+          </div>
+          <!-- Model Card 4 -->
+          <div class="model-card">
+            <div class="model-preview">
+              <model-viewer src="modelos ar/stylizedhumanlungs.glb" alt="Modelo 4" camera-controls auto-rotate></model-viewer>
+            </div>
+            <div class="model-info">
+              <h3 class="model-name">Pulmones</h3>
+              <p class="model-description">Observa el sistema circulatorio en acción.</p>
+              <div class="model-tags">
+                <div class="model-tag">Circulatorio</div>
+                <div class="model-tag">Dinámico</div>
+              </div>
+              <div class="model-actions">
+                <a href="Explorar4.html" class="model-explore">Explorar</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="models-slider-btn right" id="sliderRight"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="section" id="testimonials">
+    <div class="container">
+      <div class="section-title">
+        <h2>Testimonios</h2>
+      </div>
+      <div class="testimonial-container">
+        <div class="testimonial">
+          <p class="testimonial-content">"Esta experiencia 3D cambió mi forma de entender la anatomía humana."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">A</div>
+            <div class="author-info">
+              <h4>Alex</h4>
+              <p>Estudiante de Medicina</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial">
+          <p class="testimonial-content">"Innovador y muy interactivo, ideal para el aprendizaje."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">M</div>
+            <div class="author-info">
+              <h4>María</h4>
+              <p>Profesora de Biología</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-controls">
+        <div class="testimonial-btn"><i class="fas fa-chevron-left"></i></div>
+        <div class="testimonial-btn"><i class="fas fa-chevron-right"></i></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Section -->
+  <section class="newsletter" id="newsletter">
+    <div class="container">
+      <h2>Suscríbete a nuestro boletín</h2>
+      <p>Recibe las últimas actualizaciones y noticias sobre AR Anatomía.</p>
+      <p class="newsletter-extra">Únete a nuestra comunidad para acceder a contenido exclusivo, demostraciones en vivo y ofertas especiales en futuras innovaciones.</p>
+      <form class="newsletter-form">
+        <input type="email" placeholder="Tu correo electrónico" class="newsletter-input" required />
+        <button type="submit" class="newsletter-btn">Suscribirse</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-column">
+        <h3>Acerca de</h3>
+        <ul class="footer-links">
+          <li><a href="#">Nuestra historia</a></li>
+          <li><a href="#">Equipo</a></li>
+          <li><a href="#">Carreras</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Soporte</h3>
+        <ul class="footer-links">
+          <li><a href="#">Ayuda</a></li>
+          <li><a href="#">Preguntas Frecuentes</a></li>
+          <li><a href="#">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Legal</h3>
+        <ul class="footer-links">
+          <li><a href="#">Términos de Uso</a></li>
+          <li><a href="#">Política de Privacidad</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2025 AR Anatomía. Todos los derechos reservados.</p>
+      <div class="social-links">
+        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating AR Button -->
+  <div class="floating-ar" id="floating-ar">
+    <i class="fas fa-vr-cardboard"></i>
+  </div>
+
+  <!-- AR Popup -->
+  <div class="ar-popup" id="ar-popup">
+    <div class="ar-popup-content">
+      <div class="ar-popup-close" id="ar-popup-close"><i class="fas fa-times"></i></div>
+      <model-viewer src="modelos ar/ecorche_-_anatomy_study.glb" alt="Modelo en AR" camera-controls ar auto-rotate></model-viewer>
+    </div>
+  </div>
+</body>
+</html>
