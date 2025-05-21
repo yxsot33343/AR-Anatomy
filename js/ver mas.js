@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
           name: 'Sistema muscular',
           description: 'Sistema muscular humano',
-          modelUrl: 'Sistema_muscular/Sistema muscular.glb',
+          modelUrl: 'Sistemamuscular/Sistema muscular.glb',
           exploreUrl: 'detalle/sistema_muscular.html' // si aún no tienes este HTML, crea uno
         
         
@@ -38,30 +38,30 @@ document.addEventListener('DOMContentLoaded', () => {
       {
         name: 'Musculos lisos',
         description: 'Tejido muscular involuntario de órganos internos.',
-        modelUrl: 'Sistema_muscular/smooth_muscle_cell.glb',
+        modelUrl: 'Sistemamuscular/smooth_muscle_cell.glb',
         exploreUrl: 'detalle/Musculos lisos.html'
       },
       {
         name: 'Musculo cardíaco',
         description: 'Músculo del corazón, de acción involuntaria.',
-        modelUrl: 'Sistema_muscular/Musculo cardíaco.glb',
+        modelUrl: 'Sistemamuscular/Musculo_cardíaco.glb',
         exploreUrl: 'detalle/Musculo cardíaco.html'
       },
       {
         name: 'Fascias',
         description: 'Tejido que envuelve músculos y órganos.',
-        modelUrl: 'Sistema_muscular/Fascias.glb',
+        modelUrl: 'Sistemamuscular/Fascias.glb',
         exploreUrl: 'detalle/Fascias.html'
       },
       {
-        name: 'skeleton',
+        name: 'Sistema esqueletico',
         description: 'Esqueleto humano',
-        modelUrl: 'modelos ar/skeleton.obj',
+        modelUrl: 'Sistema esqueletico/Pelvis y femur.glb',
         exploreUrl: 'detalle/skeleton.html'
       },
       {
-        name: 'stylizeddigestivesystem',
-        description: 'Sistema digestivo estilizado',
+        name: 'Femur',
+        description: 'Hueso largo que sostiene el muslo.',
         modelUrl: 'modelos ar/stylizeddigestivesystem.glb',
         exploreUrl: 'detalle/digestive.html'
       }
