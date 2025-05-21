@@ -27,29 +27,32 @@ document.addEventListener('DOMContentLoaded', () => {
   // Modelos base (puedes repetir, aquí hay 6 ejemplos)
   const baseModels = [
     {
-      name: '16_eye',
-      description: 'Ojo en desarrollo',
-      modelUrl: 'modelos ar/16_eye.fbx',
-      exploreUrl: 'detalle/16_eye.html'
-    },
+        
+          name: 'Sistema muscular',
+          description: 'Sistema muscular humano',
+          modelUrl: 'Sistema muscular/Sistema muscular.glb',
+          exploreUrl: 'detalle/sistema_muscular.html' 
+        
+        
+      },
     {
-      name: '16_week_fetal_heart',
-      description: 'Corazón fetal 16 semanas',
-      modelUrl: 'modelos ar/16_week_fetal_heart.glb',
-      exploreUrl: 'detalle/16_week_fetal_heart.html'
-    },
+        name: 'Musculos lisos',
+        description: 'Tejido muscular involuntario de órganos internos.',
+        modelUrl: 'Sistema muscular/Musculos lisos.glb',
+        exploreUrl: 'detalle/smooth_muscle_cell.html'
+      },
+     {
+        name: 'Musculo cardíaco',
+        description: 'Músculo del corazón, de acción involuntaria.',
+        modelUrl: 'Sistema muscular/Musculo cardíaco.glb',
+        exploreUrl: 'detalle/Musculo cardíaco.html'
+      },
     {
-      name: 'ecorche',
-      description: 'Ecórche anatómico',
-      modelUrl: 'modelos ar/ecorche_-_anatomy_stl.glb',
-      exploreUrl: 'detalle/ecorche.html'
-    },
-    {
-      name: 'nervous_system',
-      description: 'Sistema nervioso',
-      modelUrl: 'modelos ar/nervous_system.glb',
-      exploreUrl: 'detalle/nervous_system.html'
-    },
+        name: 'Fascias',
+        description: 'Tejido que envuelve músculos y órganos.',
+        modelUrl: 'Sistema muscular/Fascias.glb',
+        exploreUrl: 'detalle/Fascias.html'
+      },
     {
       name: 'skeleton',
       description: 'Esqueleto humano',
