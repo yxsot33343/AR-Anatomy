@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.models-grid');
   
@@ -239,3 +240,4 @@ document.addEventListener('DOMContentLoaded', () => {
       grid.appendChild(wrapper.firstElementChild);
     });
   });
+
