@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
       {
         name: 'Musculo cardíaco',
         description: 'Músculo del corazón, de acción involuntaria.',
-        modelUrl: 'Sistemamuscular/Musculos_caríaco.glb',
+        modelUrl: 'Sistemamuscular/Musculo_cardíaco.glb',
         exploreUrl: 'detalle/Musculo cardíaco.html'
       },
       {
