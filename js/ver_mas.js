@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       name: 'Sistema muscular',
       description: 'Sistema muscular humano',
-      modelUrl: 'Sistemamuscular/sistema_muscular.glb',
+      modelUrl: 'Sistemamuscular/Sistema_muscular.glb',
       exploreUrl: 'detalle/sistema_muscular.html'
     },
     {
@@ -41,49 +41,49 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       name: 'Músculo cardíaco',
       description: 'Músculo del corazón, de acción involuntaria.',
-      modelUrl: 'Sistemamuscular/musculo_cardiaco.glb',
+      modelUrl: 'Sistemamuscular/Musculo_cardíaco.glb',
       exploreUrl: 'detalle/musculo_cardiaco.html'
     },
     {
       name: 'Fascias',
       description: 'Tejido que envuelve músculos y órganos.',
-      modelUrl: 'Sistemamuscular/fascias.glb',
+      modelUrl: 'Sistemamuscular/Fascias.glb',
       exploreUrl: 'detalle/fascias.html'
     },
     {
       name: 'Sistema esquelético',
       description: 'Soporte y protección del cuerpo.',
-      modelUrl: 'Sistemaesqueletico/esqueleto.glb',
+      modelUrl: 'Sistemaesqueletico/sistema_esqueleto.glb',
       exploreUrl: 'detalle/esqueleto.html'
     },
     {
       name: 'Fémur',
       description: 'Hueso largo que sostiene el muslo.',
-      modelUrl: 'Sistemaesqueletico/femur.glb',
+      modelUrl: 'Sistemaesqueletico/Femur.glb',
       exploreUrl: 'detalle/femur.html'
     },
     {
       name: 'Cartílago',
       description: 'Tejido flexible que amortigua y da forma.',
-      modelUrl: 'Sistemaesqueletico/cartilago.glb',
+      modelUrl: 'Sistemaesqueletico/Cartílago.glb',
       exploreUrl: 'detalle/cartilago.html'
     },
     {
       name: 'Costillas',
       description: 'Hueso que protege el pecho.',
-      modelUrl: 'Sistemaesqueletico/costillas.glb',
+      modelUrl: 'Sistemaesqueletico/Costillas.glb',
       exploreUrl: 'detalle/costillas.html'
     },
     {
       name: 'Pelvis y fémur',
       description: 'Pelvis y fémur: sostienen el cuerpo y permiten el movimiento.',
-      modelUrl: 'Sistemaesqueletico/pelvis_femur.glb',
+      modelUrl: 'Sistemaesqueletico/pelvis_y _femur.glb',
       exploreUrl: 'detalle/pelvis_femur.html'
     },
     {
       name: 'Cráneo',
       description: 'Hueso que protege el cerebro.',
-      modelUrl: 'Sistemaesqueletico/craneo.glb',
+      modelUrl: 'Sistemaesqueletico/Cráneo.glb',
       exploreUrl: 'detalle/craneo.html'
     },
     {
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       name: 'Intestino grueso y delgado',
       description: 'Absorben nutrientes y forman heces.',
-      modelUrl: 'Sistemadigestivo/intestinos.glb',
+      modelUrl: 'Sistemadigestivo/intesino_grueso_delgado.glb',
       exploreUrl: 'detalle/intestinos.html'
     },
     {
