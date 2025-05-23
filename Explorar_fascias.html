@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AR Anatomía - Esqueleto</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+  <style>
+    :root {
+      --primary: #2ecc71;
+      --secondary: #3498db;
+      --accent: #fdd835;
+      --bg-dark: #121212;
+      --bg-light: #ffffff;
+      --card-dark: #1e1e1e;
+      --card-light: #f9f9f9;
+      --text-dark: #f5f5f5;
+      --text-light: #333333;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Poppins, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-dark);
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+
+    body.light-theme {
+      background: var(--bg-light);
+      color: var(--text-light);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      background: rgba(0, 0, 0, 0.7);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    body.light-theme .header {
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .logo {
+      font-size: clamp(1.2rem, 4vw, 1.5rem);
+      font-weight: 600;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      white-space: nowrap;
+    }
+
+    .back {
+      color: inherit;
+      text-decoration: none;
+      font-size: clamp(0.8rem, 3vw, 1rem);
+      white-space: nowrap;
+    }
+
+    #themeToggleSmall {
+      font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+      padding: 6px 12px;
+      white-space: nowrap;
+    }
+
+    .main {
+      padding: 80px 15px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .main h1 {
+      font-size: clamp(1.8rem, 6vw, 2.5rem);
+      margin-bottom: 10px;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      word-wrap: break-word;
+    }
+
+    .info-card {
+      background: var(--card-dark);
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+      margin: 15px 0;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.light-theme .info-card {
+      background: var(--card-light);
+      color: var(--text-light);
+    }
+
+    .info-card h2 {
+      margin-bottom: 10px;
+      color: var(--accent);
+      font-size: clamp(1.2rem, 4vw, 1.5rem);
+    }
+
+    .info-card p {
+      font-size: clamp(0.9rem, 3vw, 1rem);
+      line-height: 1.5;
+    }
+
+    .model-container {
+      position: relative;
+      width: 100%;
+      height: clamp(300px, 50vh, 500px);
+      margin-bottom: 20px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Burbuja flotante informativa */
+    .info-bubble {
+      position: absolute;
+      top: clamp(20%, 30vh, 40%);
+      left: clamp(5px, 2vw, 15px);
+      background: rgba(0, 0, 0, 0.85);
+      color: white;
+      padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 18px);
+      border-radius: 15px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 
+                  0 4px 15px rgba(0, 0, 0, 0.4),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      max-width: clamp(180px, 40vw, 250px);
+      z-index: 10;
+      animation: float 3s ease-in-out infinite;
+      cursor: pointer;
+      transition: transform 0.3s;
+      backdrop-filter: blur(10px);
+    }
+
+    .info-bubble::after {
+      content: '';
+      position: absolute;
+      right: clamp(-8px, -2vw, -12px);
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: clamp(10px, 2.5vw, 15px) solid rgba(0, 0, 0, 0.85);
+      border-top: clamp(6px, 1.5vw, 10px) solid transparent;
+      border-bottom: clamp(6px, 1.5vw, 10px) solid transparent;
+      filter: drop-shadow(2px 0 3px rgba(0, 0, 0, 0.3));
+    }
+
+    .info-bubble::before {
+      content: '';
+      position: absolute;
+      right: clamp(-6px, -1.5vw, -10px);
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: clamp(8px, 2vw, 13px) solid rgba(255, 255, 255, 0.2);
+      border-top: clamp(5px, 1.2vw, 8px) solid transparent;
+      border-bottom: clamp(5px, 1.2vw, 8px) solid transparent;
+      z-index: -1;
+    }
+
+    .info-bubble:hover {
+      transform: scale(1.05);
+    }
+
+    .info-bubble h3 {
+      margin: 0 0 6px 0;
+      font-size: clamp(0.8rem, 2.5vw, 1rem);
+      font-weight: 600;
+    }
+
+    .info-bubble p {
+      margin: 0;
+      font-size: clamp(0.7rem, 2vw, 0.85rem);
+      line-height: 1.3;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .btn {
+      padding: clamp(8px, 2vw, 12px) clamp(16px, 4vw, 24px);
+      margin: 5px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: clamp(0.8rem, 2.5vw, 1rem);
+      font-weight: 500;
+      transition: background 0.3s, color 0.3s, transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-width: fit-content;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    .btn i {
+      font-size: clamp(0.8rem, 2vw, 1rem);
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      color: #fff;
+    }
+
+    .btn-audio {
+      background: var(--accent);
+      color: black;
+    }
+
+    .btn-info {
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      color: white;
+    }
+
+    .btn-ar {
+      background: linear-gradient(45deg, var(--secondary), var(--primary));
+      color: white;
+    }
+
+    .audio-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0 10px;
+    }
+
+    .audio-container audio {
+      display: none;
+    }
+
+    /* Panel de información desplegable */
+    .info-panel {
+      display: none;
+      background: var(--card-dark);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      animation: slideDown 0.4s ease-out;
+      transition: background 0.3s, color 0.3s;
+      text-align: left;
+    }
+
+    body.light-theme .info-panel {
+      background: var(--card-light);
+      color: var(--text-light);
+    }
+
+    .info-panel.show {
+      display: block;
+    }
+
+    @keyframes slideDown {
+      from { 
+        opacity: 0; 
+        transform: translateY(-20px); 
+        max-height: 0;
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0); 
+        max-height: 2000px;
+      }
+    }
+
+    .info-panel h2 {
+      text-align: center;
+      font-size: clamp(1.3rem, 4vw, 1.8rem);
+      margin-bottom: 20px;
+    }
+
+    .detail-section {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: rgba(46, 204, 113, 0.1);
+      border-radius: 12px;
+      border-left: 4px solid var(--primary);
+    }
+
+    .detail-section h3 {
+      color: var(--primary);
+      margin-bottom: 12px;
+      font-size: clamp(1.1rem, 3vw, 1.3rem);
+    }
+
+    .detail-section p {
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      line-height: 1.6;
+    }
+
+    .detail-section ul {
+      padding-left: 20px;
+    }
+
+    .detail-section li {
+      margin-bottom: 8px;
+      line-height: 1.5;
+      font-size: clamp(0.85rem, 2.3vw, 0.95rem);
+    }
+
+    /* AR Modal */
+    .ar-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      overflow-y: auto;
+    }
+
+    .ar-modal-content {
+      background-color: var(--card-dark);
+      margin: 5% auto;
+      padding: 20px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    body.light-theme .ar-modal-content {
+      background-color: var(--card-light);
+      color: var(--text-light);
+    }
+
+    .ar-modal-content h2 {
+      font-size: clamp(1.3rem, 4vw, 1.8rem);
+      margin-bottom: 15px;
+    }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      cursor: pointer;
+      color: #aaa;
+    }
+
+    .close:hover {
+      color: white;
+    }
+
+    .qr-container {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      margin: 15px 0;
+      display: inline-block;
+    }
+
+    .qr-container p {
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      margin-top: 10px;
+    }
+
+    .ar-instructions {
+      background: rgba(231, 76, 60, 0.1);
+      padding: 15px;
+      border-radius: 12px;
+      margin: 15px 0;
+      border-left: 4px solid #e74c3c;
+      text-align: left;
+    }
+
+    .ar-instructions h4 {
+      color: #e74c3c;
+      margin-bottom: 12px;
+      font-size: clamp(1rem, 3vw, 1.2rem);
+    }
+
+    .ar-instructions ol {
+      padding-left: 20px;
+    }
+
+    .ar-instructions li {
+      margin-bottom: 8px;
+      line-height: 1.5;
+      font-size: clamp(0.8rem, 2.3vw, 0.9rem);
+    }
+
+    /* Media queries específicas */
+    @media (max-width: 480px) {
+      .header {
+        padding: 8px 10px;
+        flex-wrap: wrap;
+        min-height: 60px;
+      }
+
+      .main {
+        padding: 70px 10px 30px;
+      }
+
+      .btn {
+        font-size: 0.8rem;
+        padding: 8px 16px;
+        margin: 3px;
+      }
+
+      .audio-container {
+        gap: 5px;
+      }
+
+      .info-bubble {
+        left: 5px;
+        top: 25%;
+        max-width: 160px;
+        font-size: 0.7rem;
+      }
+
+      .ar-modal-content {
+        margin: 10px auto;
+        width: 95%;
+        height: calc(100vh - 20px);
+        max-height: none;
+        border-radius: 10px;
+      }
+
+      .detail-section {
+        padding: 12px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .header {
+        padding: 6px 8px;
+      }
+
+      .logo {
+        font-size: 1rem;
+      }
+
+      .back {
+        font-size: 0.8rem;
+      }
+
+      #themeToggleSmall {
+        font-size: 0.7rem;
+        padding: 4px 8px;
+      }
+
+      .main {
+        padding: 65px 8px 25px;
+      }
+
+      .info-card {
+        padding: 12px;
+      }
+
+      .model-container {
+        height: 250px;
+        border-radius: 10px;
+      }
+
+      .btn {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+      }
+
+      .info-bubble {
+        max-width: 140px;
+        padding: 6px 10px;
+        border-radius: 10px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .header {
+        padding: 15px 30px;
+      }
+
+      .main {
+        padding: 120px 20px 40px;
+      }
+
+      .audio-container {
+        gap: 10px;
+      }
+
+      .info-bubble {
+        left: 15px;
+        top: 40%;
+        max-width: 250px;
+      }
+
+      .ar-modal-content {
+        width: 80%;
+        max-width: 600px;
+      }
+    }
+
+    /* Ajustes para orientación landscape en móviles */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .model-container {
+        height: 200px;
+      }
+
+      .info-bubble {
+        top: 15%;
+        max-width: 120px;
+        font-size: 0.65rem;
+      }
+
+      .ar-modal-content {
+        margin: 2% auto;
+        max-height: 96vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="logo"><i class="fas fa-bone"></i> AR Órganos</div>
+    <a href="oficial.html" class="back"><i class="fas fa-arrow-left"></i> Volver</a>
+    <button class="btn btn-primary" id="themeToggleSmall">Modo Claro</button>
+  </header>
+
+  <div class="main">
+    <h1>Esqueleto Humano 3D</h1>
+    <div class="info-card">
+      <p>Explora la estructura completa del esqueleto humano con esta visualización interactiva.</p>
+    </div>
+
+    <div class="model-container">
+      <!-- Burbuja flotante informativa -->
+      <div class="info-bubble">
+        <h3><i class="fas fa-bone"></i> Cráneo</h3>
+        <p>22 huesos forman el cráneo, protegiendo el cerebro y dando forma al rostro.</p>
+      </div>
+
+      <model-viewer
+        src="Sistemamuscular/Fascias.glb"
+        alt="Modelo 3D del Esqueleto Humano"
+        auto-rotate
+        camera-controls
+        ar
+        shadow-intensity="1"
+        ar-modes="webxr scene-viewer quick-look"
+        ios-src="modelos ar/esqueleto.usdz"
+      ></model-viewer>
+    </div>
+
+    <div class="audio-container">
+      <audio id="esqueletoAudio" src="Audios/Sistemamuscular/Fascias.mp3"></audio>
+      <button class="btn btn-audio" onclick="toggleAudio()">
+        <i class="fas fa-play"></i> Reproducir Audio
+      </button>
+      <button class="btn btn-info" onclick="toggleInfoPanel()">
+        <i class="fas fa-info-circle"></i> Información Detallada
+      </button>
+      <button class="btn btn-ar" onclick="showARModal()">
+        <i class="fas fa-cube"></i> Ver en AR
+      </button>
+    </div>
+
+    <!-- Panel de información desplegable -->
+    <div id="infoPanel" class="info-panel">
+      <h2><i class="fas fa-bone"></i> Sistema Muscular Humano</h2>
+      
+      <div class="detail-section">
+       <h3>Información General</h3>
+<p>Las fascias son capas de tejido conectivo fibroso que envuelven, separan y sostienen músculos, órganos y otras estructuras del cuerpo. Ayudan a mantener la forma y permiten el movimiento coordinado de los músculos y órganos.</p>
+
+<div class="detail-section">
+  <h3>Funciones Principales</h3>
+  <ul>
+    <li><strong>Sujeción y soporte:</strong> Mantienen los músculos y órganos en su lugar.</li>
+    <li><strong>Separación:</strong> Dividen grupos musculares y órganos, facilitando su movimiento independiente.</li>
+    <li><strong>Transmisión de fuerzas:</strong> Distribuyen la tensión generada por los músculos durante el movimiento.</li>
+    <li><strong>Protección:</strong> Actúan como una barrera que protege los tejidos contra lesiones.</li>
+    <li><strong>Conducción de nervios y vasos:</strong> Permiten el paso de nervios y vasos sanguíneos hacia músculos y órganos.</li>
+  </ul>
+</div>
+
+
+
+<div class="detail-section">
+  <h3>Partes Principales</h3>
+  <ul>
+    <li><strong>Fascia superficial:</strong> Capa que se encuentra justo debajo de la piel, compuesta por tejido conectivo laxo.</li>
+    <li><strong>Fascia profunda:</strong> Tejido más denso que envuelve músculos y grupos musculares.</li>
+    <li><strong>Fascia visceral (o subserosa):</strong> Envuelve y sostiene órganos internos.</li>
+    <li><strong>Tejido conectivo:</strong> Formado principalmente por fibras de colágeno y elastina.</li>
+    <li><strong>Fibras nerviosas y vasos sanguíneos:</strong> Contenidos dentro de las fascias para nutrir y controlar los tejidos.</li>
+  </ul>
+</div>
+
+
+
+
+      <div class="detail-section">
+        <h3>Datos Curiosos</h3>
+       <ul>
+  <li>Las fascias son esenciales para la coordinación eficiente del movimiento muscular.</li>
+  <li>La fascitis es la inflamación dolorosa de las fascias, común en deportistas.</li>
+  <li>Las fascias permiten que los músculos se deslicen suavemente unos sobre otros.</li>
+  <li>Algunas técnicas de masaje y terapia física se enfocan en liberar tensiones en las fascias.</li>
+  <li>El tejido fascial contiene muchas terminaciones nerviosas, por lo que puede ser fuente de dolor.</li>
+</ul>
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Realidad Aumentada -->
+  <div id="arModal" class="ar-modal">
+    <div class="ar-modal-content">
+      <span class="close" onclick="closeARModal()">&times;</span>
+      <h2><i class="fas fa-cube"></i> Realidad Aumentada</h2>
+      
+      <div class="ar-instructions">
+        <h4>Instrucciones para ver en AR:</h4>
+        <ol>
+          <li><strong>En móviles Android:</strong> Toca el botón AR en el modelo 3D arriba</li>
+          <li><strong>En iPhone/iPad:</strong> Toca el botón AR para abrir en Quick Look</li>
+          <li><strong>Escanea el código QR:</strong> Desde otro dispositivo para acceder rápidamente</li>
+          <li><strong>Navegador compatible:</strong> Chrome, Safari, Firefox moderno</li>
+        </ol>
+      </div>
+
+      <div class="qr-container">
+        <div id="qrcode"></div>
+        <p><strong>Escanea este código QR</strong><br>para acceder desde tu móvil</p>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <button class="btn btn-primary" onclick="launchAR()">
+          <i class="fas fa-mobile-alt"></i> Abrir AR Ahora
+        </button>
+        <button class="btn btn-info" onclick="checkARSupport()">
+          <i class="fas fa-question-circle"></i> Verificar Compatibilidad
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <script>
+    const audio = document.getElementById("esqueletoAudio");
+    const audioBtn = document.querySelector(".btn-audio");
+
+    function toggleAudio() {
+      if (audio.paused) {
+        audio.play();
+        audioBtn.innerHTML = '<i class="fas fa-pause"></i> Pausar Audio';
+      } else {
+        audio.pause();
+        audioBtn.innerHTML = '<i class="fas fa-play"></i> Reproducir Audio';
+      }
+    }
+
+    // Resetear botón cuando termine el audio
+    audio.addEventListener('ended', function() {
+      audioBtn.innerHTML = '<i class="fas fa-play"></i> Reproducir Audio';
+    });
+
+    const toggleTheme = document.getElementById("themeToggleSmall");
+    toggleTheme.addEventListener("click", () => {
+      document.body.classList.toggle("light-theme");
+      toggleTheme.textContent =
+        document.body.classList.contains("light-theme")
+          ? "Modo Oscuro"
+          : "Modo Claro";
+    });
+
+    // Funciones del panel de información
+    function toggleInfoPanel() {
+      const panel = document.getElementById("infoPanel");
+      const btn = document.querySelector(".btn-info");
+      
+      if (panel.classList.contains("show")) {
+        panel.classList.remove("show");
+        btn.innerHTML = '<i class="fas fa-info-circle"></i> Información Detallada';
+      } else {
+        panel.classList.add("show");
+        btn.innerHTML = '<i class="fas fa-times-circle"></i> Ocultar Información';
+      }
+    }
+
+    // Funciones del modal de AR
+    function showARModal() {
+      document.getElementById("arModal").style.display = "block";
+      generateQR();
+    }
+
+    function closeARModal() {
+      document.getElementById("arModal").style.display = "none";
+    }
+
+    // Generar código QR
+    function generateQR() {
+      const currentURL = window.location.href;
+      const qr = new QRious({
+        element: document.getElementById('qrcode'),
+        value: currentURL,
+        size: 200,
+        backgroundAlpha: 0,
+        foreground: '#2ecc71',
+        level: 'M'
+      });
+    }
+
+    // Lanzar AR
+    function launchAR() {
+      const modelViewer = document.querySelector('model-viewer');
+      if (modelViewer && modelViewer.canActivateAR) {
+        modelViewer.activateAR();
+      } else {
+        alert('AR no está disponible en este dispositivo o navegador. Intenta con Chrome en Android o Safari en iOS.');
+      }
+    }
+
+    // Verificar soporte AR
+    function checkARSupport() {
+      const modelViewer = document.querySelector('model-viewer');
+      let message = 'Estado de compatibilidad AR:\n\n';
+      
+      if ('xr' in navigator) {
+        message += '✅ WebXR API disponible\n';
+      } else {
+        message += '❌ WebXR API no disponible\n';
+      }
+      
+      if (modelViewer && modelViewer.canActivateAR) {
+        message += '✅ AR activable en este dispositivo\n';
+      } else {
+        message += '❌ AR no disponible actualmente\n';
+      }
+      
+      message += '\nDispositivos compatibles:\n';
+      message += '• Android: Chrome 81+\n';
+      message += '• iOS: Safari 13+\n';
+      message += '• Algunos navegadores requieren HTTPS';
+      
+      alert(message);
+    }
+
+    // Cerrar modales al hacer clic fuera
+    window.onclick = function(event) {
+      const arModal = document.getElementById("arModal");
+      
+      if (event.target == arModal) {
+        closeARModal();
+      }
+    }
+
+    // Detectar soporte AR al cargar
+    window.addEventListener('load', function() {
+      const modelViewer = document.querySelector('model-viewer');
+      
+      // Agregar evento para cuando AR esté listo
+      modelViewer.addEventListener('ar-status', function(event) {
+        console.log('AR Status:', event.detail.status);
+      });
+    });
+  </script>
+</body>
+</html>
