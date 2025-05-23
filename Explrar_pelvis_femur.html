@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AR Anatomía - Cardíaco</title>
+  <title>AR Anatomía - Pelvis y femur</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
@@ -557,21 +557,20 @@
   </header>
 
   <div class="main">
-    <h1>Cartílago Humano 3D 3D</h1>
+    <h1>Esqueleto Humano 3D</h1>
     <div class="info-card">
-      <p>Explora la estructura completa del cardíaco humano con esta visualización interactiva.</p>
+      <p>Explora la estructura completa del esqueleto humano con esta visualización interactiva.</p>
     </div>
 
     <div class="model-container">
       <!-- Burbuja flotante informativa -->
       <div class="info-bubble">
-        <h3><i class="fas fa-bone"></i> Cardíaco</h3>
-       <p>El músculo cardíaco forma las paredes del corazón, latiendo de forma continua para bombear sangre por todo el cuerpo.</p>
-</div>
-
+        <h3><i class="fas fa-bone"></i> Cráneo</h3>
+        <p>22 huesos forman el cráneo, protegiendo el cerebro y dando forma al rostro.</p>
+      </div>
 
       <model-viewer
-        src="Sistemamuscular/Musculo_cardíaco.glb"
+        src="Sistemaesqueletico/pelvis_y _femur.glb"
         alt="Modelo 3D del Esqueleto Humano"
         auto-rotate
         camera-controls
@@ -583,7 +582,7 @@
     </div>
 
     <div class="audio-container">
-      <audio id="esqueletoAudio" src="Audios/Sistemamuscular/Musculo_cardiaco.mp3"></audio>
+      <audio id="esqueletoAudio" src="Audios/Sistemaesqueletico/Pelvis y femur.mp3 "></audio>
       <button class="btn btn-audio" onclick="toggleAudio()">
         <i class="fas fa-play"></i> Reproducir Audio
       </button>
@@ -597,45 +596,50 @@
 
     <!-- Panel de información desplegable -->
     <div id="infoPanel" class="info-panel">
-      <h2><i class="fas fa-bone"></i> Sistema Muscular Humano</h2>
+      <h2><i class="fas fa-bone"></i> Pelvis y femur humano</h2>
       
       <div class="detail-section">
-       <h3>Información General</h3>
-<p>El músculo cardíaco es un tejido muscular involuntario y estriado que forma el corazón. Su función principal es bombear la sangre a través del sistema circulatorio mediante contracciones rítmicas y continuas durante toda la vida.</p>
-</div>
+      <h3>Información General</h3>
+<p>La pelvis conecta la columna con las piernas y soporta el peso, mientras que el fémur es el hueso más largo y fuerte que facilita el movimiento.</p>
+ </div>
+
+
 
 <div class="detail-section">
   <h3>Funciones Principales</h3>
   <ul>
-    <li><strong>Contracción rítmica:</strong> Genera latidos constantes para impulsar la sangre.</li>
-    <li><strong>Autoexcitación:</strong> Puede generar impulsos eléctricos propios sin necesidad de estímulos externos.</li>
-    <li><strong>Transmisión de impulsos:</strong> Permite la propagación rápida del impulso eléctrico para una contracción sincronizada.</li>
-    <li><strong>Mantenimiento del flujo sanguíneo:</strong> Asegura el suministro continuo de oxígeno y nutrientes a todo el cuerpo.</li>
-    <li><strong>Resistencia al cansancio:</strong> Funciona sin interrupciones durante toda la vida, sin fatigarse.</li>
+    <li><strong>Movimiento involuntario:</strong> Controlan movimientos automáticos en órganos internos.</li>
+    <li><strong>Regulación del flujo sanguíneo:</strong> Ajustan el diámetro de los vasos sanguíneos para controlar la presión arterial.</li>
+    <li><strong>Transporte de alimentos:</strong> Facilitan el movimiento de alimentos a través del tracto digestivo mediante contracciones rítmicas.</li>
+    <li><strong>Contracción del útero:</strong> Participan en las contracciones durante el parto.</li>
+    <li><strong>Mantenimiento del tono muscular:</strong> Mantienen la tensión necesaria en órganos para su correcto funcionamiento.</li>
   </ul>
 </div>
 
-<div class="detail-section">
+
+    <div class="detail-section">
   <h3>Partes Principales</h3>
   <ul>
-    <li><strong>Células cardíacas (cardiomiocitos):</strong> Células musculares especializadas y estriadas con un solo núcleo.</li>
-    <li><strong>Discos intercalares:</strong> Uniones celulares que permiten la transmisión rápida de señales eléctricas entre células.</li>
-    <li><strong>Sarcómero:</strong> Unidad contráctil de las células musculares estriadas.</li>
-    <li><strong>Miocardio:</strong> Capa muscular gruesa del corazón compuesta por músculo cardíaco.</li>
-    <li><strong>Endocardio y epicardio:</strong> Capas que recubren el interior y exterior del corazón, respectivamente.</li>
+    <li><strong>Células musculares lisas:</strong> Células alargadas y fusiformes sin estrías visibles.</li>
+    <li><strong>Fibras musculares lisas:</strong> Unidades que forman los músculos lisos, con contracción lenta y sostenida.</li>
+    <li><strong>Tejido conectivo:</strong> Rodea y sostiene las fibras musculares lisas.</li>
+    <li><strong>Núcleo central:</strong> Cada célula contiene un solo núcleo central.</li>
+    <li><strong>Inervación autónoma:</strong> Controlados por el sistema nervioso autónomo (involuntario).</li>
   </ul>
 </div>
+
 
 
       <div class="detail-section">
         <h3>Datos Curiosos</h3>
         <ul>
-  <li>El músculo cardíaco puede latir aproximadamente 100,000 veces al día.</li>
-  <li>Es el único músculo involuntario estriado del cuerpo humano.</li>
-  <li>Los discos intercalares contienen desmosomas y uniones gap que permiten la coordinación de los latidos.</li>
-  <li>La contracción del músculo cardíaco es regulada por el nodo sinoauricular, conocido como el marcapasos natural del corazón.</li>
-  <li>El músculo cardíaco tiene alta resistencia al cansancio debido a su abundancia de mitocondrias.</li>
+  <li>Los músculos lisos se contraen más lentamente que los músculos esqueléticos pero pueden mantener la contracción por más tiempo.</li>
+  <li>Son responsables del movimiento de alimentos a través del intestino mediante un proceso llamado peristalsis.</li>
+  <li>El músculo liso no se cansa fácilmente, a diferencia del músculo esquelético.</li>
+  <li>Se encuentran en la mayoría de los órganos internos, excepto en el corazón.</li>
+  <li>Su actividad es regulada principalmente por el sistema nervioso autónomo y hormonas.</li>
 </ul>
+
 
       </div>
     </div>
