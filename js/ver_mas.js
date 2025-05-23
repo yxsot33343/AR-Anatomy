@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.models-grid');
 
+  // Plantilla de cada tarjeta
   const cardTpl = model => `
     <div class="model-card">
       <div class="model-preview">
@@ -23,41 +24,42 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
   `;
 
+  // Lista de modelos base (sin duplicaciones ni errores de ruta)
   const baseModels = [
     {
       name: 'Sistema muscular',
       description: 'Sistema muscular humano',
-      modelUrl: 'Sistemamuscular/Sistema_muscular.glb',
+      modelUrl: 'Sistemamuscular/sistema_muscular.glb',
       exploreUrl: 'detalle/sistema_muscular.html'
     },
     {
       name: 'Músculos lisos',
       description: 'Tejido muscular involuntario de órganos internos.',
-      modelUrl: 'Sistemamuscular/Musculos_lisos.glb',
+      modelUrl: 'Sistemamuscular/smooth_muscle_cell.glb',
       exploreUrl: 'detalle/musculos_lisos.html'
     },
     {
       name: 'Músculo cardíaco',
       description: 'Músculo del corazón, de acción involuntaria.',
-      modelUrl: 'Sistemamuscular/Musculo_cardiaco.glb',
+      modelUrl: 'Sistemamuscular/musculo_cardiaco.glb',
       exploreUrl: 'detalle/musculo_cardiaco.html'
     },
     {
       name: 'Fascias',
       description: 'Tejido que envuelve músculos y órganos.',
-      modelUrl: 'Sistemamuscular/Fascias.glb',
+      modelUrl: 'Sistemamuscular/fascias.glb',
       exploreUrl: 'detalle/fascias.html'
     },
     {
       name: 'Sistema esquelético',
       description: 'Soporte y protección del cuerpo.',
-      modelUrl: 'Sistemaesqueletico/sistema_esqueletico.glb',
-      exploreUrl: 'detalle/sistema_esqueletico.html'
+      modelUrl: 'Sistemaesqueletico/esqueleto.glb',
+      exploreUrl: 'detalle/esqueleto.html'
     },
     {
       name: 'Fémur',
       description: 'Hueso largo que sostiene el muslo.',
-      modelUrl: 'Sistemaesqueletico/Femur.glb',
+      modelUrl: 'Sistemaesqueletico/femur.glb',
       exploreUrl: 'detalle/femur.html'
     },
     {
@@ -68,21 +70,21 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       name: 'Costillas',
-      description: 'Huesos que protegen el pecho.',
+      description: 'Hueso que protege el pecho.',
       modelUrl: 'Sistemaesqueletico/costillas.glb',
       exploreUrl: 'detalle/costillas.html'
     },
     {
       name: 'Pelvis y fémur',
-      description: 'Pelvis y fémur: Sostienen el cuerpo, conectan las piernas y permiten el movimiento.',
-      modelUrl: 'Sistemaesqueletico/pelvis_y_femur.glb',
-      exploreUrl: 'detalle/pelvis_y_femur.html'
+      description: 'Pelvis y fémur: sostienen el cuerpo y permiten el movimiento.',
+      modelUrl: 'Sistemaesqueletico/pelvis_femur.glb',
+      exploreUrl: 'detalle/pelvis_femur.html'
     },
     {
       name: 'Cráneo',
       description: 'Hueso que protege el cerebro.',
-      modelUrl: 'Sistemaesqueletico/Cráneo.glb',
-      exploreUrl: 'detalle/cranio.html'
+      modelUrl: 'Sistemaesqueletico/craneo.glb',
+      exploreUrl: 'detalle/craneo.html'
     },
     {
       name: 'Arteria',
@@ -93,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       name: 'Capilares',
       description: 'Vasos muy finos que conectan arterias y venas.',
-      modelUrl: 'Sistemacirculatorio/Capilares.glb',
+      modelUrl: 'Sistemacirculatorio/capilares.glb',
       exploreUrl: 'detalle/capilares.html'
     },
     {
@@ -122,43 +124,43 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       name: 'Sistema digestivo',
-      description: 'Encargado de procesar los alimentos.',
+      description: 'Transforma alimentos en energía.',
       modelUrl: 'Sistemadigestivo/sistema_digestivo.glb',
       exploreUrl: 'detalle/sistema_digestivo.html'
     },
     {
       name: 'Páncreas',
-      description: 'Órgano que regula el azúcar y ayuda a la digestión.',
+      description: 'Regula el azúcar y ayuda a la digestión.',
       modelUrl: 'Sistemadigestivo/pancreas.glb',
       exploreUrl: 'detalle/pancreas.html'
     },
     {
       name: 'Intestino grueso y delgado',
-      description: 'Absorben nutrientes y agua, y forman las heces.',
-      modelUrl: 'Sistemadigestivo/intestino_grueso_delgado.glb',
-      exploreUrl: 'detalle/intestino_grueso_delgado.html'
+      description: 'Absorben nutrientes y forman heces.',
+      modelUrl: 'Sistemadigestivo/intestinos.glb',
+      exploreUrl: 'detalle/intestinos.html'
     },
     {
       name: 'Hígado',
-      description: 'Órgano que filtra toxinas y produce bilis.',
+      description: 'Filtra toxinas y produce bilis.',
       modelUrl: 'Sistemadigestivo/higado.glb',
       exploreUrl: 'detalle/higado.html'
     },
     {
       name: 'Estómago',
-      description: 'Órgano que descompone los alimentos.',
+      description: 'Descompone los alimentos.',
       modelUrl: 'Sistemadigestivo/estomago.glb',
       exploreUrl: 'detalle/estomago.html'
     },
     {
       name: 'Boca',
-      description: 'Inicio de la digestión; tritura y mezcla alimentos.',
+      description: 'Inicio de la digestión.',
       modelUrl: 'Sistemadigestivo/boca.glb',
       exploreUrl: 'detalle/boca.html'
     },
     {
       name: 'Tiroides',
-      description: 'Glándula que regula el metabolismo.',
+      description: 'Regula el metabolismo.',
       modelUrl: 'Sistemaendocrinario/tiroides.glb',
       exploreUrl: 'detalle/tiroides.html'
     },
@@ -170,25 +172,25 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       name: 'Hipófisis',
-      description: 'Glándula que controla otras glándulas del cuerpo.',
+      description: 'Controla otras glándulas del cuerpo.',
       modelUrl: 'Sistemaendocrinario/hipofisis.glb',
       exploreUrl: 'detalle/hipofisis.html'
     },
     {
       name: 'Bazo',
-      description: 'Órgano que filtra la sangre y combate infecciones.',
+      description: 'Filtra sangre y combate infecciones.',
       modelUrl: 'Sistemainmunologico/bazo.glb',
       exploreUrl: 'detalle/bazo.html'
     },
     {
-      name: 'Linfático',
-      description: 'Sistema que transporta linfa y defiende el cuerpo.',
+      name: 'Sistema linfático',
+      description: 'Transporta linfa y defiende el cuerpo.',
       modelUrl: 'Sistemainmunologico/linfatico.glb',
       exploreUrl: 'detalle/linfatico.html'
     },
     {
       name: 'Sistema nervioso',
-      description: 'Red que transmite señales para controlar el cuerpo.',
+      description: 'Controla funciones y respuestas del cuerpo.',
       modelUrl: 'Sistemanervioso/sistema_nervioso.glb',
       exploreUrl: 'detalle/sistema_nervioso.html'
     },
@@ -200,24 +202,26 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       name: 'Médula espinal',
-      description: 'Transmite señales entre cerebro y cuerpo.',
+      description: 'Transmite señales entre el cuerpo y el cerebro.',
       modelUrl: 'Sistemanervioso/medula_espinal.glb',
       exploreUrl: 'detalle/medula_espinal.html'
     },
     {
       name: 'Cerebro',
-      description: 'Controla funciones del cuerpo, pensamiento y emociones.',
+      description: 'Controla pensamiento y funciones corporales.',
       modelUrl: 'Sistemanervioso/cerebro.glb',
       exploreUrl: 'detalle/cerebro.html'
     }
   ];
 
+  // Rellenar hasta 48 tarjetas
   const modelsData = [];
   for (let i = 0; i < 48; i++) {
     const m = baseModels[i % baseModels.length];
     modelsData.push(m);
   }
 
+  // Insertar todas las tarjetas en el DOM
   modelsData.forEach(model => {
     const wrapper = document.createElement('div');
     wrapper.innerHTML = cardTpl(model).trim();
