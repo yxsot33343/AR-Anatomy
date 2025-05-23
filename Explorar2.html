@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AR Anatomía - Sistema Digestivo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+  <style>
+    :root {
+      --primary: #2ecc71;
+      --secondary: #3498db;
+      --accent: #fdd835;
+      --bg-dark: #121212;
+      --bg-light: #ffffff;
+      --card-dark: #1e1e1e;
+      --card-light: #f9f9f9;
+      --text-dark: #f5f5f5;
+      --text-light: #333333;
+    }
+
+    body {
+      margin: 0;
+      font-family: Poppins, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-dark);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.light-theme {
+      background: var(--bg-light);
+      color: var(--text-light);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: rgba(0, 0, 0, 0.7);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 100;
+      box-sizing: border-box;
+    }
+
+    body.light-theme .header {
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 600;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .back {
+      color: inherit;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    .main {
+      padding: 120px 20px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .main h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .info-card {
+      background: var(--card-dark);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+      margin: 20px 0;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.light-theme .info-card {
+      background: var(--card-light);
+      color: var(--text-light);
+    }
+
+    .info-card h2 {
+      margin-bottom: 10px;
+      color: var(--accent);
+    }
+
+    .model-container {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      margin-bottom: 20px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 100%;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      margin: 0 10px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background 0.3s, color 0.3s, transform 0.2s;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      color: #fff;
+    }
+
+    .btn-qr {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .qr-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 200;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .qr-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    #qr-reader {
+      width: 100%;
+      max-width: 350px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    /* Estilo para ocultar elementos no deseados del escáner */
+    #qr-reader__dashboard_section_csr button {
+      border-radius: 20px !important;
+      padding: 8px 16px !important;
+      background: var(--accent) !important;
+      color: black !important;
+      font-family: Poppins, sans-serif !important;
+    }
+    
+    #qr-reader__dashboard_section_fsr button {
+      border-radius: 20px !important;
+      padding: 8px 16px !important;
+      background: var(--accent) !important;
+      color: black !important;
+      font-family: Poppins, sans-serif !important;
+    }
+
+    #qr-reader__scan_region img {
+      display: none;
+    }
+
+    .qr-result {
+      background: var(--card-dark);
+      color: var(--text-dark);
+      width: 100%;
+      max-width: 350px;
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 12px;
+      word-break: break-all;
+      text-align: left;
+    }
+
+    body.light-theme .qr-result {
+      background: var(--card-light);
+      color: var(--text-light);
+    }
+
+    .qr-buttons {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .close-qr {
+      background: var(--card-dark);
+      color: var(--text-dark);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    body.light-theme .close-qr {
+      background: var(--card-light);
+      color: var(--text-light);
+    }
+
+    .scan-again {
+      background: var(--accent);
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .qr-status {
+      margin: 10px 0;
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .result-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--primary);
+    }
+
+    .result-content {
+      margin-top: 5px;
+    }
+
+    /* Ajustes para dispositivos móviles */
+    @media (max-width: 768px) {
+      .header {
+        padding: 10px 15px;
+      }
+      
+      .main {
+        padding: 100px 15px 30px;
+      }
+      
+      .btn {
+        padding: 10px 18px;
+        margin: 5px;
+        font-size: 0.9rem;
+      }
+      
+      .model-container {
+        height: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="logo"><i class="fas fa-stomach"></i> AR Órganos</div>
+    <a href="oficial.html" class="back"><i class="fas fa-arrow-left"></i> Volver</a>
+    <button class="btn btn-primary" id="themeToggleSmall">Modo Claro</button>
+  </header>
+
+  <div class="main">
+    <h1>Sistema Digestivo 3D</h1>
+    <p class="info-card">Explora el sistema digestivo humano en 3D. Observa los órganos que participan en la digestión, desde la boca hasta el intestino grueso, responsables de procesar los alimentos, absorber los nutrientes y eliminar los desechos del cuerpo.</p>
+    
+    <div class="model-container">
+      <model-viewer id="skeletonModel" src="modelos ar/stylizeddigestivesystem.glb" alt="Modelo 3D del Sistema Digestivo Humano" camera-controls auto-rotate ar ar-modes="webxr scene-viewer quick-look" ar-status="not-presenting">
+        <button slot="ar-button" class="btn btn-primary" style="background-color: var(--primary); color: white; position: absolute; bottom: 16px; right: 16px; z-index: 10;"><i class="fas fa-vr-cardboard"></i> Ver en AR</button>
+      </model-viewer>
+      
+      <!-- Audio (oculto inicialmente) -->
+      <audio id="boneAudio" loop preload="auto" style="display:none;">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3" type="audio/mp3">
+        Tu navegador no soporta el elemento de audio.
+      </audio>
+      
+      <!-- Controles de audio (ocultos inicialmente) -->
+      <div id="audioControls" style="display:none; margin-top: 15px;">
+        <button id="playAudio" class="btn btn-primary"><i class="fas fa-play"></i> Reproducir Sonido</button>
+        <button id="stopAudio" class="btn btn-primary" style="display:none;"><i class="fas fa-stop"></i> Detener Sonido</button>
+      </div>
+    </div>
+
+    <div>
+      <button class="btn btn-primary" id="detailBtn"><i class="fas fa-info-circle"></i> Más Detalles</button>
+      <button class="btn btn-qr" id="scanBtn"><i class="fas fa-qrcode"></i> Escanear QR</button>
+    </div>
+
+    <div class="info-card" id="details" style="display:none;">
+      <h2>Componentes Principales</h2>
+      <ul style="text-align:left;">
+        <li>Boca y esófago: Inicio del proceso digestivo.</li>
+        <li>Estómago: Almacena y procesa inicialmente los alimentos.</li>
+        <li>Intestino delgado: Principal sitio de absorción de nutrientes.</li>
+        <li>Intestino grueso: Absorbe agua y forma los desechos.</li>
+        <li>Órganos accesorios: Hígado, páncreas y vesícula biliar.</li>
+      </ul>
+      
+      <h2>Funciones Principales</h2>
+      <ul style="text-align:left;">
+        <li><strong>Digestión mecánica:</strong> Trituración y mezcla de los alimentos.</li>
+        <li><strong>Digestión química:</strong> Descomposición de alimentos mediante enzimas.</li>
+        <li><strong>Absorción:</strong> Captación de nutrientes por el torrente sanguíneo.</li>
+        <li><strong>Eliminación:</strong> Expulsión de residuos no digeribles.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qr-overlay" id="qrOverlay">
+    <div id="qr-reader"></div>
+    <div class="qr-status" id="qrStatus">Esperando iniciar el escáner...</div>
+    <div class="qr-result" id="qrResult" style="display:none;">
+      <div class="result-title">Contenido del QR:</div>
+      <div class="result-content" id="qrContent">-</div>
+    </div>
+    <div class="qr-buttons">
+      <button class="scan-again" id="scanAgain" style="display:none;"><i class="fas fa-redo"></i> Escanear Otro</button>
+      <button class="close-qr" id="closeQr"><i class="fas fa-times"></i> Cerrar</button>
+    </div>
+  </div>
+
+  <script>
+    // Modo claro/oscuro
+    const themeBtn = document.getElementById('themeToggleSmall');
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      themeBtn.textContent = document.body.classList.contains('light-theme') ? 'Modo Oscuro' : 'Modo Claro';
+    });
+
+    // Mostrar/ocultar detalles
+    document.getElementById('detailBtn').addEventListener('click', () => {
+      const details = document.getElementById('details');
+      details.style.display = details.style.display === 'none' ? 'block' : 'none';
+    });
+
+    // Código QR especial para activar la experiencia de audio
+    const QR_AUDIO_CODE = "SKELETON3DAUDIO"; // Este es el código QR que activará el audio
+    
+    // Audio
+    const boneAudio = document.getElementById('boneAudio');
+    const playAudioBtn = document.getElementById('playAudio');
+    const stopAudioBtn = document.getElementById('stopAudio');
+    const audioControls = document.getElementById('audioControls');
+    
+    // Control de audio
+    playAudioBtn.addEventListener('click', () => {
+      boneAudio.play();
+      playAudioBtn.style.display = 'none';
+      stopAudioBtn.style.display = 'inline-block';
+    });
+    
+    stopAudioBtn.addEventListener('click', () => {
+      boneAudio.pause();
+      boneAudio.currentTime = 0;
+      playAudioBtn.style.display = 'inline-block';
+      stopAudioBtn.style.display = 'none';
+    });
+    
+    // Función para activar la experiencia interactiva con audio
+    function activateSkeletonExperience() {
+      // Mostrar controles de audio
+      audioControls.style.display = 'block';
+      
+      // Enfocar en el modelo 3D
+      const skeletonModel = document.getElementById('skeletonModel');
+      skeletonModel.setAttribute('auto-rotate', 'true');
+      skeletonModel.setAttribute('rotation-per-second', '30deg');
+      
+      // Mostrar mensaje de activación
+      const infoCard = document.querySelector('.info-card');
+      infoCard.innerHTML = '<h2 style="color: var(--accent);">¡Experiencia Activada!</h2>' +
+                          '<p>Ahora puedes escuchar sonidos del esqueleto y observar el modelo 3D interactivo. ' +
+                          'Utiliza los controles debajo del modelo para reproducir o detener el sonido.</p>';
+    }
+
+    // Escáner QR
+    const qrOverlay = document.getElementById('qrOverlay');
+    const scanBtn = document.getElementById('scanBtn');
+    const closeQr = document.getElementById('closeQr');
+    const scanAgain = document.getElementById('scanAgain');
+    const qrStatus = document.getElementById('qrStatus');
+    const qrResult = document.getElementById('qrResult');
+    const qrContent = document.getElementById('qrContent');
+    let html5QrcodeScanner;
+
+    scanBtn.addEventListener('click', () => {
+      qrOverlay.classList.add('active');
+      qrResult.style.display = 'none';
+      scanAgain.style.display = 'none';
+      qrStatus.textContent = 'Iniciando cámara...';
+      
+      html5QrcodeScanner = new Html5Qrcode("qr-reader");
+      html5QrcodeScanner.start(
+        { facingMode: "environment" }, // Preferir cámara trasera
+        { fps: 10, qrbox: 250 },
+        (decodedText) => {
+          // Callback de éxito
+          qrStatus.textContent = '¡Código QR detectado!';
+          
+          // Verificar si es el código especial para activar el audio
+          if (decodedText === QR_AUDIO_CODE) {
+            qrContent.innerHTML = "<strong>¡Código especial detectado!</strong><br>Activando experiencia interactiva con audio...";
+            qrResult.style.display = 'block';
+            
+            // Cerrar el escáner automáticamente después de 2 segundos
+            setTimeout(() => {
+              if (html5QrcodeScanner) {
+                html5QrcodeScanner.stop().catch(err => console.log("Error al cerrar el escáner:", err));
+              }
+              qrOverlay.classList.remove('active');
+              
+              // Activar la experiencia de audio
+              activateSkeletonExperience();
+            }, 2000);
+          } else {
+            // Procesar el contenido del QR normalmente
+            let formattedContent = '';
+            if (decodedText.startsWith('http://') || decodedText.startsWith('https://')) {
+              formattedContent = `<a href="${decodedText}" target="_blank">${decodedText}</a>`;
+            } else if (decodedText.includes('@') && decodedText.includes('.')) {
+              formattedContent = `<a href="mailto:${decodedText}">${decodedText}</a>`;
+            } else {
+              formattedContent = decodedText;
+            }
+            
+            // Mostrar resultado
+            qrContent.innerHTML = formattedContent;
+            qrResult.style.display = 'block';
+            scanAgain.style.display = 'block';
+          }
+          
+          // Detener el escáner después de una detección exitosa
+          html5QrcodeScanner.stop();
+        },
+        (error) => {
+          // No mostramos errores para evitar spam en la consola
+          console.warn(`Fallo en el escaneo: ${error}`);
+        }
+      ).catch(err => {
+        qrStatus.textContent = `Error al iniciar la cámara: ${err}`;
+      });
+    });
+
+    // Escanear otro código QR
+    scanAgain.addEventListener('click', () => {
+      qrResult.style.display = 'none';
+      scanAgain.style.display = 'none';
+      qrStatus.textContent = 'Reiniciando cámara...';
+      
+      // Reiniciar escáner
+      html5QrcodeScanner = new Html5Qrcode("qr-reader");
+      html5QrcodeScanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: 250 },
+        (decodedText) => {
+          qrStatus.textContent = '¡Código QR detectado!';
+          
+          // Procesar el contenido del QR
+          let formattedContent = '';
+          if (decodedText.startsWith('http://') || decodedText.startsWith('https://')) {
+            formattedContent = `<a href="${decodedText}" target="_blank">${decodedText}</a>`;
+          } else if (decodedText.includes('@') && decodedText.includes('.')) {
+            formattedContent = `<a href="mailto:${decodedText}">${decodedText}</a>`;
+          } else {
+            formattedContent = decodedText;
+          }
+          
+          // Mostrar resultado
+          qrContent.innerHTML = formattedContent;
+          qrResult.style.display = 'block';
+          scanAgain.style.display = 'block';
+          
+          // Detener el escáner después de una detección exitosa
+          html5QrcodeScanner.stop();
+        },
+        (error) => {
+          // No mostramos errores
+          console.warn(`Fallo en el escaneo: ${error}`);
+        }
+      ).catch(err => {
+        qrStatus.textContent = `Error al iniciar la cámara: ${err}`;
+      });
+    });
+
+    // Cerrar el escáner
+    closeQr.addEventListener('click', () => {
+      if (html5QrcodeScanner) {
+        html5QrcodeScanner.stop().then(() => {
+          console.log("Escáner cerrado.");
+        }).catch(err => {
+          console.log("Error al cerrar el escáner:", err);
+        });
+      }
+      qrOverlay.classList.remove('active');
+    });
+  </script>
+</body>
+</html>

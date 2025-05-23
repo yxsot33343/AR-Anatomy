@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Galería de Modelos 3D</title>
+
+    <!-- Enlace al CSS -->
+    <link rel="stylesheet" href="css/ver_mas.css" />
+
+    <!-- Enlace al JS que generará las 40 cards -->
+    <script src="js/ver_mas.js" defer></script>
+
+    <!-- Fuente Poppins -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- model-viewer de Google para cargar los .glb -->
+    <script
+      type="module"
+      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+    ></script>
+</head>
+<body>
+    <section class="models-section">
+        <div class="container">
+            <h2>Explora nuestros Modelos 3D</h2>
+            <!-- Aquí el JS inyectará las 40 tarjetas -->
+            <div class="models-grid"></div>
+        </div>
+    </section>
+</body>
+</html>
