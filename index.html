@@ -9,291 +9,298 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <style>
-    :root { --primary-color:#3498db; --secondary-color:#2ecc71; --background-color:#121212; --text-color:#fff; }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Space Grotesk', sans-serif; background:linear-gradient(to bottom, #0a0a1a, #000); color:var(--text-color); min-height:100vh; position:relative; }
-    #background-canvas { position:fixed; top:0; left:0; z-index:-1; width:100%; height:100%; }
-    .container { display:flex; height:100vh; position:relative; z-index:10; }
-    .sidebar { width:80px; background:rgba(10,10,26,0.8); display:flex; flex-direction:column; align-items:center; padding:20px 0; border-right:1px solid rgba(255,255,255,0.1); }
-    .sidebar-item { width:50px; height:50px; margin-bottom:15px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .3s; opacity:0.5; }
-    .sidebar-item svg { width:30px; height:30px; stroke:#fff; fill:none; transition:all .3s; }
-    .sidebar-item:hover, .sidebar-item.active { opacity:1; background:rgba(255,255,255,0.1); transform:scale(1.1); }
-    .sidebar-item.active svg { stroke:#0ff; fill:rgba(0,255,255,0.2); }
-    .main-content { flex-grow:1; overflow-y:scroll; scroll-snap-type:y mandatory; width:calc(100% - 80px); scrollbar-width:thin; scrollbar-color:var(--primary-color) #333; }
-    .main-content::-webkit-scrollbar { width:8px; }
-    .main-content::-webkit-scrollbar-track { background:#333; }
-    .main-content::-webkit-scrollbar-thumb { background-color:var(--primary-color); border-radius:4px; }
-    .section-content { min-height:100vh; scroll-snap-align:start; display:flex; justify-content:center; align-items:center; padding:20px; position:relative; transition:opacity .8s; }
-    .content-wrapper { display:flex; gap:40px; width:80%; align-items:center; justify-content:center; }
-    .planet-title { position:absolute; top:20px; left:50%; transform:translateX(-50%); font-size:2.5rem; font-weight:bold; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.8); z-index:5; opacity:0; transform:translateX(-50%) translateY(-20px); }
-    .model-container { flex:1; max-width:600px; }
-    model-viewer { width:100%; height:400px; background:transparent; border-radius:10px; }
-    .info-container { flex:1; color:#ddd; line-height:1.5; opacity:0; transform:translateX(20px); }
-    .info-container h2 { font-size:2rem; margin-bottom:10px; color:var(--secondary-color); }
-    .intro-container { display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:0 20px; max-width:800px; margin:0 auto; }
-    .intro-title { font-size:4rem; font-weight:700; margin-bottom:20px; background:linear-gradient(45deg, var(--primary-color), var(--secondary-color)); background-clip:text; -webkit-background-clip:text; color:transparent; opacity:0; transform:translateY(-30px); }
-    .intro-subtitle { font-size:1.5rem; margin-bottom:40px; opacity:0; transform:translateY(-20px); }
-    .cta-buttons { display:flex; gap:20px; opacity:0; margin-bottom:50px; transform:translateY(-15px); }
-    .btn { padding:15px 30px; text-decoration:none; border-radius:50px; font-weight:600; transition:all .3s; position:relative; overflow:hidden; z-index:1; border:2px solid transparent; display:inline-flex; align-items:center; gap:8px; }
-    .btn-primary { background:linear-gradient(45deg, var(--primary-color), var(--secondary-color)); color:#fff; }
-    .btn-secondary, .btn-tertiary { background:transparent; color:#fff; border-color:#fff; }
-    .btn::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:rgba(255,255,255,0.1); transition:all .3s; z-index:-1; }
-    .btn:hover::before { left:0; }
-    .anatomical-details { display:flex; gap:30px; opacity:0; transform:translateY(-10px); }
-    .detail-item { text-align:center; background:rgba(255,255,255,0.05); padding:15px; border-radius:10px; backdrop-filter:blur(10px); }
-    .detail-item h3 { font-size:1.2rem; margin-bottom:10px; background:linear-gradient(45deg, var(--primary-color), var(--secondary-color)); background-clip:text; -webkit-background-clip:text; color:transparent; }
-    /* Nueva clase para la animación de salida */
-    .fade-out { opacity: 0 !important; transform: translateY(20px) !important; transition: opacity 0.5s ease, transform 0.5s ease !important; }
-    @media(max-width:768px){
-      .content-wrapper { flex-direction:column; }
-      .sidebar { width:100%; height:80px; flex-direction:row; justify-content:center; align-items:center; }
-      .sidebar-item { margin-right:15px; margin-bottom:0; }
-      .intro-title { font-size:2.5rem; }
-      model-viewer { height:300px; }
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2ecc71;
+      --background-color: #121212;
+      --text-color: #fff;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: linear-gradient(to bottom, #0a0a1a, #000);
+      color: var(--text-color);
+      min-height: 100vh;
+      position: relative;
+    }
+    #background-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+    }
+    .container {
+      display: flex;
+      height: 100vh;
+      position: relative;
+      z-index: 10;
+      flex-direction: row;
+    }
+    .sidebar {
+      width: 80px;
+      background: rgba(10, 10, 26, 0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+    }
+    .sidebar-item {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 15px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0.5;
+    }
+    .sidebar-item svg {
+      width: 30px;
+      height: 30px;
+      stroke: #fff;
+      fill: none;
+      transition: all 0.3s;
+    }
+    .sidebar-item:hover,
+    .sidebar-item.active {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.1);
+      transform: scale(1.1);
+    }
+    .sidebar-item.active svg {
+      stroke: #0ff;
+      fill: rgba(0, 255, 255, 0.2);
+    }
+    .main-content {
+      flex-grow: 1;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary-color) #333;
+    }
+    .main-content::-webkit-scrollbar {
+      width: 8px;
+    }
+    .main-content::-webkit-scrollbar-track {
+      background: #333;
+    }
+    .main-content::-webkit-scrollbar-thumb {
+      background-color: var(--primary-color);
+      border-radius: 4px;
+    }
+    .section-content {
+      min-height: 100vh;
+      scroll-snap-align: start;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+      transition: opacity 0.8s;
+    }
+    .content-wrapper {
+      display: flex;
+      gap: 40px;
+      width: 80%;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .planet-title {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2.5rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.8);
+      z-index: 5;
+      opacity: 0;
+    }
+    .model-container {
+      flex: 1;
+      max-width: 600px;
+    }
+    model-viewer {
+      width: 100%;
+      height: 400px;
+      background: transparent;
+      border-radius: 10px;
+    }
+    .info-container {
+      flex: 1;
+      color: #ddd;
+      line-height: 1.5;
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    .info-container h2 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: var(--secondary-color);
+    }
+    .intro-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .intro-title {
+      font-size: 4rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      opacity: 0;
+    }
+    .intro-subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 40px;
+      opacity: 0;
+    }
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      opacity: 0;
+      margin-bottom: 50px;
+    }
+    .btn {
+      padding: 15px 30px;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      border: 2px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary {
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      color: #fff;
+    }
+    .btn-secondary, .btn-tertiary {
+      background: transparent;
+      color: #fff;
+      border-color: #fff;
+    }
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s;
+      z-index: -1;
+    }
+    .btn:hover::before {
+      left: 0;
+    }
+    .anatomical-details {
+      display: flex;
+      gap: 30px;
+      opacity: 0;
+      flex-wrap: wrap;
+    }
+    .detail-item {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 15px;
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+    }
+    .detail-item h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        height: 60px;
+        flex-direction: row;
+        justify-content: center;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding: 10px 0;
+      }
+      .sidebar-item {
+        margin: 0 10px;
+      }
+      .main-content {
+        width: 100%;
+      }
+      .content-wrapper {
+        flex-direction: column;
+        width: 100%;
+        gap: 20px;
+      }
+      model-viewer {
+        height: 300px;
+      }
+      .intro-title {
+        font-size: 2.5rem;
+      }
+      .info-container h2 {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .intro-title {
+        font-size: 2rem;
+      }
+      .intro-subtitle {
+        font-size: 1rem;
+      }
+      .btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+      model-viewer {
+        height: 250px;
+      }
+    }
+
+    .fade-out {
+      opacity: 0 !important;
+      transform: translateY(20px) !important;
+      transition: opacity 0.5s ease, transform 0.5s ease !important;
     }
   </style>
 </head>
 <body>
-  <canvas id="background-canvas"></canvas>
-  <div class="container">
-    <div class="sidebar">
-      <div class="sidebar-item active" data-section="cerebro">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5">
-          <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
-        </svg>
-      </div>
-      <div class="sidebar-item" data-section="corazon">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5">
-          <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-        </svg>
-      </div>
-      <div class="sidebar-item" data-section="pulmones">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5">
-          <path d="M8 16v-1a4 4 0 014-4h4m0 0v5h-4a4 4 0 01-4-4zM8 12V7a4 4 0 014-4h4v5M8 12h8"/>
-        </svg>
-      </div>
-      <div class="sidebar-item" data-section="sistema-digestivo">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5">
-          <path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
-        </svg>
-      </div>
-      <div class="sidebar-item" data-section="sistema-nervioso">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5">
-          <path d="M16 18v-4a4 4 0 00-4-4H8m4 8h3a2 2 0 002-2v-2a2 2 0 00-2-2h-2.5M12 8V4m0 4a2 2 0 00-2 2v1m9 5v2a2 2 0 01-2 2h-1"/>
-        </svg>
-      </div>
-      <div class="sidebar-item" data-section="introduccion">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5">
-          <path d="M12 3c4.97 0 9 4.03 9 9s-4.03 9-9 9-9-4.03-9-9 4.03-9 9-9z"/>
-          <path d="M9 12l2 2 4-4"/>
-        </svg>
-      </div>
-    </div>
-    <div class="main-content">
-      <div class="section-content" data-section="cerebro">
-        <h1 class="planet-title">Cerebro</h1>
-        <div class="content-wrapper">
-          <div class="model-container">
-            <model-viewer src="Sistemanervioso/cerebro.glb" alt="Modelo de Cerebro" auto-rotate camera-controls ar ar-modes="scene-viewer quick-look webxr" exposure="1.0" shadow-intensity="1"></model-viewer>
-          </div>
-          <div class="info-container">
-            <h2>Cerebro</h2>
-            <p>Órgano central del sistema nervioso, encargado de regular y coordinar funciones, pensamiento, memoria y emoción.</p>
-          </div>
-        </div>
-      </div>
-      <div class="section-content" data-section="corazon">
-        <h1 class="planet-title">Corazón</h1>
-        <div class="content-wrapper">
-          <div class="model-container">
-            <model-viewer src="Sistemacirculatorio/corazon.glb" alt="Modelo de Corazón" auto-rotate camera-controls ar ar-modes="scene-viewer quick-look webxr"></model-viewer>
-          </div>
-          <div class="info-container">
-            <h2>Corazón</h2>
-            <p>Bomba muscular del sistema circulatorio que impulsa la sangre por todo el cuerpo.</p>
-          </div>
-        </div>
-      </div>
-      <div class="section-content" data-section="pulmones">
-        <h1 class="planet-title">Pulmones</h1>
-        <div class="content-wrapper">
-          <div class="model-container">
-            <model-viewer src="Sistemarespiratorio/Pulmones.glb" alt="Modelo de Pulmones" auto-rotate camera-controls ar ar-modes="scene-viewer quick-look webxr"></model-viewer>
-          </div>
-          <div class="info-container">
-            <h2>Pulmones</h2>
-            <p>Principales órganos respiratorios, responsables del intercambio de oxígeno y dióxido de carbono.</p>
-          </div>
-        </div>
-      </div>
-      <div class="section-content" data-section="sistema-digestivo">
-        <h1 class="planet-title">Sistema Digestivo</h1>
-        <div class="content-wrapper">
-          <div class="model-container">
-            <model-viewer src="Sistemadigestivo/sistema_digestivo.glb" alt="Modelo de Sistema Digestivo" auto-rotate camera-controls ar ar-modes="scene-viewer quick-look webxr"></model-viewer>
-          </div>
-          <div class="info-container">
-            <h2>Sistema Digestivo</h2>
-            <p>Encargado de la ingestión, descomposición y absorción de nutrientes.</p>
-          </div>
-        </div>
-      </div>
-      <div class="section-content" data-section="sistema-nervioso">
-        <h1 class="planet-title">Sistema Nervioso</h1>
-        <div class="content-wrapper">
-          <div class="model-container">
-            <model-viewer src="Sistemanervioso/sistema_nervioso.glb" alt="Modelo de Sistema Nervioso" auto-rotate camera-controls ar ar-modes="scene-viewer quick-look webxr"></model-viewer>
-          </div>
-          <div class="info-container">
-            <h2>Sistema Nervioso</h2>
-            <p>Coordina las actividades corporales y procesa la información del entorno.</p>
-          </div>
-        </div>
-      </div>
-      <div class="section-content" data-section="introduccion">
-        <div class="intro-container">
-          <h1 class="intro-title">AR Anatomía</h1>
-          <p class="intro-subtitle">Exploración anatómica revolucionaria con Realidad Aumentada.</p>
-          <div class="cta-buttons">
-            <a href="oficial.html" class="btn btn-primary">Comenzar Exploración</a>
-            <a href="#" class="btn btn-secondary">Ver Demo</a>
-            <a href="#" class="btn btn-tertiary">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path d="M4 4h16v16H4z"/>
-                <polyline points="22,6 12,13 2,6"/>
-              </svg>
-              Contacto
-            </a>
-          </div>
-          <div class="anatomical-details">
-            <div class="detail-item"><h3>Sistemas</h3><p>10+ Sistemas Interactivos</p></div>
-            <div class="detail-item"><h3>Modelos</h3><p>Renderizado 3D de Alta Precisión</p></div>
-            <div class="detail-item"><h3>Tecnología</h3><p>AR de Última Generación</p></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <script>
-    // Configuración del fondo de partículas con Three.js
-    const canvas = document.getElementById('background-canvas'),
-          renderer = new THREE.WebGLRenderer({ canvas, alpha:true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    const scene = new THREE.Scene(),
-          camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
-    const particlesCount = 5000,
-          posArray = new Float32Array(particlesCount * 3);
-    for(let i=0; i<particlesCount*3; i++) posArray[i] = (Math.random()-0.5)*20;
-    const particlesGeometry = new THREE.BufferGeometry();
-    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-    const particlesMaterial = new THREE.PointsMaterial({ size:0.005, color:'white', transparent:true, opacity:0.5 }),
-          particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particlesMesh);
-    function animate(){ requestAnimationFrame(animate); particlesMesh.rotation.x += 0.0005; particlesMesh.rotation.y += 0.0005; renderer.render(scene, camera); }
-    animate();
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth/window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    // Animaciones de entrada para textos
-    function animateSection(section) {
-      // Primero aplicamos la clase de fade-out a todos los textos
-      document.querySelectorAll('.planet-title, .info-container, .intro-title, .intro-subtitle, .cta-buttons, .anatomical-details').forEach(el => {
-        el.classList.add('fade-out');
-      });
-      
-      // Esperamos un poco para que termine la animación de salida
-      setTimeout(() => {
-        // Luego animamos la entrada de los textos de la sección actual
-        const currentTitle = section.querySelector('.planet-title');
-        const currentInfo = section.querySelector('.info-container');
-        const currentIntroTitle = section.querySelector('.intro-title');
-        const currentIntroSubtitle = section.querySelector('.intro-subtitle');
-        const currentCtaButtons = section.querySelector('.cta-buttons');
-        const currentDetails = section.querySelector('.anatomical-details');
-        
-        if (currentTitle) {
-          gsap.fromTo(currentTitle, 
-            { opacity: 0, y: -20 },
-            { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
-          );
-          currentTitle.classList.remove('fade-out');
-        }
-        
-        if (currentInfo) {
-          gsap.fromTo(currentInfo, 
-            { opacity: 0, x: 20 },
-            { opacity: 1, x: 0, duration: 0.8, delay: 0.2, ease: 'power3.out' }
-          );
-          currentInfo.classList.remove('fade-out');
-        }
-        
-        if (currentIntroTitle) {
-          gsap.fromTo(currentIntroTitle, 
-            { opacity: 0, y: -30 },
-            { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
-          );
-          currentIntroTitle.classList.remove('fade-out');
-        }
-        
-        if (currentIntroSubtitle) {
-          gsap.fromTo(currentIntroSubtitle, 
-            { opacity: 0, y: -20 },
-            { opacity: 1, y: 0, duration: 0.8, delay: 0.1, ease: 'power3.out' }
-          );
-          currentIntroSubtitle.classList.remove('fade-out');
-        }
-        
-        if (currentCtaButtons) {
-          gsap.fromTo(currentCtaButtons, 
-            { opacity: 0, y: -15 },
-            { opacity: 1, y: 0, duration: 0.8, delay: 0.2, ease: 'power3.out' }
-          );
-          currentCtaButtons.classList.remove('fade-out');
-        }
-        
-        if (currentDetails) {
-          gsap.fromTo(currentDetails, 
-            { opacity: 0, y: -10 },
-            { opacity: 1, y: 0, duration: 0.8, delay: 0.3, ease: 'power3.out' }
-          );
-          currentDetails.classList.remove('fade-out');
-        }
-      }, 300); // Tiempo para la animación de salida
-    }
-
-    // Animación inicial
-    window.addEventListener('DOMContentLoaded', () => {
-      const firstSection = document.querySelector('.section-content[data-section="cerebro"]');
-      animateSection(firstSection);
-    });
-
-    // Observador de intersección para detectar secciones visibles
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting){
-          document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
-          const current = document.querySelector(`.sidebar-item[data-section="${entry.target.dataset.section}"]`);
-          if(current) current.classList.add('active');
-          
-          // Aplicar animaciones de entrada cuando la sección está visible
-          animateSection(entry.target);
-        }
-      });
-    }, { threshold:0.5 });
-    
-    document.querySelectorAll('.section-content').forEach(section => observer.observe(section));
-    
-    // Navegación con la barra lateral
-    document.querySelectorAll('.sidebar-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const section = document.querySelector(`.section-content[data-section="${item.dataset.section}"]`);
-        if(section) section.scrollIntoView({ behavior:'smooth' });
-      });
-    });
-  </script>
+  <!-- Tu contenido HTML aquí -->
 </body>
 </html>
