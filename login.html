@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Inicio y Registro Adaptativo</title>
+  <style>
+    :root {
+      --dark-bg: #1a1a1a;
+      --card-bg: #242424;
+      --accent-red: #8c3030;
+      --teal-accent: #34a3a3;
+      --text-light: #e0e0e0;
+    }
+
+    *, html, body { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    html, body { height: 100%; }
+    body { display: flex; justify-content: center; align-items: center; background-color: var(--dark-bg);
+      background-image:
+        radial-gradient(circle at 80% 20%, rgba(52,34,51,0.2), transparent 70%),
+        radial-gradient(circle at 20% 80%, rgba(30,51,51,0.2), transparent 70%);
+      overflow: hidden; position: relative;
+    }
+
+    .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; }
+    .particle { position: absolute; bottom: -20px; background-color: var(--accent-red); border-radius: 50%; opacity: 0; animation: float 12s infinite linear; }
+    @keyframes float { 0% { transform: translateY(0) scale(0.3); opacity: 0; } 20% { opacity: 0.2; } 50% { transform: translateY(-50vh) scale(1); opacity: 0.5; } 80% { opacity: 0.2; } 100% { transform: translateY(-110vh) scale(0.3); opacity: 0; } }
+
+    .container {
+      position: relative; width: 400px; perspective: 1000px; transition: transform 0.5s ease; /* altura dinámica */
+    }
+    .container.enlarged { transform: scale(1.1); }
+
+    .card { width: 100%; transform-style: preserve-3d; transition: transform 0.8s ease; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+    .container.flip .card { transform: rotateY(180deg); }
+
+    .card-face { position: absolute; width: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; border-radius: 20px; background-color: var(--card-bg); }
+    .card-back { transform: rotateY(180deg); }
+
+    .form-header { position: relative; margin-bottom: 30px; text-align: center; padding-top: 40px; }
+    .form-header h2 { color: var(--text-light); font-size: 28px; }
+    .form-header .subtitle { color: #999; font-size: 16px; }
+
+    /* Heart centered above header */
+    .form-header .heart { position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); font-size: 40px; color: var(--accent-red); animation: beat 1s infinite; }
+    @keyframes beat { 0%,100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.4); } }
+
+    .form-group { width: 100%; margin-bottom: 20px; }
+    input { width: 100%; padding: 12px 15px; border-radius: 10px; background-color: rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); color: var(--text-light); font-size: 16px; transition: border-color .3s, box-shadow .3s; }
+    input:focus { border-color: var(--teal-accent); box-shadow:0 0 15px rgba(52,163,163,0.3); outline:none; }
+
+    .btn { width: 100%; padding: 12px; margin-top:10px; border:none; border-radius:10px; background-color: var(--teal-accent); color:#fff; font-size:16px; font-weight:bold; cursor:pointer; transition: background-color .3s, transform .3s; }
+    .btn:hover { background-color:#2c8a8a; transform:translateY(-2px); }
+
+    .toggle-form { margin-top:20px; color:#999; font-size:14px; cursor:pointer; text-align:center; }
+    .toggle-form span { color:var(--teal-accent); font-weight:bold; }
+
+    .heart-icon { position:absolute; font-size:50px; color:var(--accent-red); pointer-events:none; animation: pop 0.6s ease forwards; }
+    @keyframes pop { 0% { transform: scale(0); opacity:0; } 50% { transform: scale(1.5); opacity:1; } 100% { transform: scale(1); opacity:0; } }
+  </style>
+</head>
+<body>
+  <div class="particles"></div>
+  <div class="container" id="form-container">
+    <div class="card">
+      <div class="card-face card-front">
+        <div class="form-header">
+          <span class="heart">❤</span>
+          <h2>Iniciar Sesión</h2>
+          <p class="subtitle">Ingresa tus credenciales</p>
+        </div>
+        <div class="form-body" id="login-body">
+          <div class="form-group"><input type="email" placeholder="Correo electrónico" required></div>
+          <div class="form-group"><input type="password" placeholder="Contraseña" required></div>
+        </div>
+        <button class="btn" id="login-btn">Entrar</button>
+        <p class="toggle-form">¿No tienes una cuenta? <span id="show-register">Regístrate</span></p>
+      </div>
+      <div class="card-face card-back">
+        <div class="form-header">
+          <span class="heart">❤</span>
+          <h2>Registrarse</h2>
+          <p class="subtitle">Completa campos</p>
+        </div>
+        <div class="form-body" id="register-body">
+          <div class="form-group"><input type="text" placeholder="Nombre completo" required></div>
+          <div class="form-group"><input type="text" placeholder="Usuario" required></div>
+          <div class="form-group"><input type="email" placeholder="Correo electrónico" required></div>
+          <div class="form-group"><input type="password" placeholder="Contraseña" required></div>
+          <div class="form-group"><input type="password" placeholder="Confirmar contraseña" required></div>
+        </div>
+        <button class="btn" id="register-btn">Registrarme</button>
+        <p class="toggle-form">¿Ya tienes una cuenta? <span id="show-login">Inicia sesión</span></p>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const particles = document.querySelector('.particles');
+      for(let i=0; i<20; i++){ const p=document.createElement('div'); p.className='particle'; const size=Math.random()*20+5; p.style.width=size+'px'; p.style.height=size+'px'; p.style.left=Math.random()*100+'%'; p.style.animationDelay=Math.random()*5+'s'; p.style.animationDuration=(Math.random()*7+8)+'s'; particles.append(p); }
+      adjustContainerHeight();
+    });
+    const container=document.getElementById('form-container');
+    document.getElementById('show-register').addEventListener('click',e=>{e.preventDefault();container.classList.add('flip');adjustContainerHeight();});
+    document.getElementById('show-login').addEventListener('click',e=>{e.preventDefault();container.classList.remove('flip');adjustContainerHeight();});
+    function adjustContainerHeight(){ const active=container.classList.contains('flip')?document.querySelector('.card-back'):document.querySelector('.card-front'); const rect=active.getBoundingClientRect(); container.style.height=rect.height+'px'; }
+    document.getElementById('register-btn').addEventListener('click',e=>{e.preventDefault();const heart=document.createElement('div');heart.className='heart-icon';heart.textContent='❤';document.body.appendChild(heart);const rect=document.getElementById('register-btn').getBoundingClientRect();heart.style.left=rect.left+rect.width/2+'px';heart.style.top=rect.top+'px';setTimeout(()=>heart.remove(),600);container.classList.add('enlarged');setTimeout(()=>container.classList.add('flip'),300);setTimeout(()=>container.classList.remove('enlarged'),1100);setTimeout(()=>adjustContainerHeight(),800);});
+    document.getElementById('login-btn').addEventListener('click',e=>{e.preventDefault();adjustContainerHeight();});
+  </script>
+</body>
+</html>
